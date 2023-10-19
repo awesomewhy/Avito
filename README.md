@@ -6,26 +6,26 @@ Spring MVC
 
 Spring Boot
 
-Spring Data,
+Spring Data
 
-Spring Sequrity ,
+Spring Sequrity
 
-Spring Data Jpa,
+Spring Data Jpa
 
-Hibernate,
+Hibernate
 
-Thymeleaf,
+Thymeleaf
 
-Lombok,
+Lombok
 
-Docker,
+Docker
 
-JUnit,
+JUnit
 
-Postgres,
+Postgres
 
-Maven,
+Maven
 
-Git,
+Git
 
 Монолит
