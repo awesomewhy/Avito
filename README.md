@@ -1,10 +1,10 @@
 Avito:
 
-Java 17,
+Java 17
 
-Spring MVC,
+Spring MVC
 
-Spring Boot,
+Spring Boot
 
 Spring Data,
 
