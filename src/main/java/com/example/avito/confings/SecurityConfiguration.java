@@ -35,6 +35,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfiguration {
 
     private final UserService userService;
+    private final JwtRequestFilter jwtRequestFilter;
 
     private void sharedSecurityConfiguration(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -53,7 +54,9 @@ public class SecurityConfiguration {
                 .securityMatcher("/secured")
                 .authorizeHttpRequests(auth -> {
                     auth.anyRequest().authenticated();
-                });
+
+                })
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
@@ -65,7 +68,9 @@ public class SecurityConfiguration {
                 .securityMatcher("/admin")
                 .authorizeHttpRequests(auth -> {
                     auth.anyRequest().authenticated();
-                });
+                })
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return httpSecurity.build();
     }
