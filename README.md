@@ -14,6 +14,8 @@ Spring Data Jpa
 
 Hibernate
 
+JWT
+
 Thymeleaf
 
 Lombok
