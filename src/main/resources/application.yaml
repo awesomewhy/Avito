@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/avito
+    username: postgres
+    password: qwe
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+
+jwt:
+  secret: 984hg493gh0439rthr0429uruj2309yh937gc763fe87t3f89723gf
+  lifetime: 10m
