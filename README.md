@@ -14,7 +14,7 @@ Spring Data Jpa
 
 Hibernate
 
-JWTa
+JWT
 
 Thymeleaf
 
