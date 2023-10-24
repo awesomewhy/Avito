@@ -1,4 +1,4 @@
-Avito:
+Avito:q
 
 Java 17
 
