@@ -1,7 +1,7 @@
 Avito:
 
 Java 17
-q
+
 Spring MVC
 
 Spring Boot
