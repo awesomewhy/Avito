@@ -12,6 +12,4 @@ public class RegistartionUserDto {
     private String password;
     private String confirmPassword;
     private String email;
-
-
 }
