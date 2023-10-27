@@ -66,9 +66,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createNewUser(RegistartionUserDto registartionUserDto) {
         User user = new User();
+
         user.setUsername(registartionUserDto.getUsername());
+
         user.setEmail(registartionUserDto.getEmail());
-        user.setPassword(passwordEncoder.encode(registartionUserDto.getPassword()));
+        if(registartionUserDto.getPassword().length() >= 5) {
+            user.setPassword(passwordEncoder.encode(registartionUserDto.getPassword()));
+        } else {
+            user.setPassword(passwordEncoder.encode("No password"));
+        }
+
         user.setRoles(List.of(roleService.getUserRole()));
         return userRepository.save(user);
 

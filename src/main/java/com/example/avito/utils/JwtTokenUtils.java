@@ -28,6 +28,7 @@ public class JwtTokenUtils {
                 .map(GrantedAuthority::getAuthority)
                 .toList();
         claims.put("roles", roleList);
+        claims.put("username", userDetails.getUsername());
 
         Date issuedDate = new Date();
         Date expiredDate = new Date(issuedDate.getTime() + jwtLifetime.toMillis());
