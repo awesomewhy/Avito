@@ -32,18 +32,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         String username = null;
         String jwt = null;
-
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
             try {
                 username = jwtTokenUtils.getUsername(jwt);
             } catch (ExpiredJwtException e) {
-                log.debug("Время жизни токета истекла");
+                log.debug("Время жизни токена вышло");
             } catch (SignatureException e) {
                 log.debug("Подпись неправильная");
             }
         }
-
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                     username,

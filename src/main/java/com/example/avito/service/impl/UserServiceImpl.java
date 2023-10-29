@@ -25,26 +25,12 @@ import java.beans.Transient;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-    private RoleService roleService;
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Autowired
-    public void setRoleService(RoleService roleService) {
-        this.roleService = roleService;
-    }
-
-    @Autowired
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final UserRepository userRepository;
+    private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Optional<User> findByUsername(String username) {
@@ -63,19 +49,13 @@ public class UserServiceImpl implements UserService {
                 user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList())
         );
     }
+
     @Override
     public User createNewUser(RegistartionUserDto registartionUserDto) {
         User user = new User();
-
         user.setUsername(registartionUserDto.getUsername());
-
         user.setEmail(registartionUserDto.getEmail());
-        if(registartionUserDto.getPassword().length() >= 5) {
-            user.setPassword(passwordEncoder.encode(registartionUserDto.getPassword()));
-        } else {
-            user.setPassword(passwordEncoder.encode("No password"));
-        }
-
+        user.setPassword(passwordEncoder.encode(registartionUserDto.getPassword()));
         user.setRoles(List.of(roleService.getUserRole()));
         return userRepository.save(user);
 

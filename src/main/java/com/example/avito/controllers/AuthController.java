@@ -22,7 +22,6 @@ public class AuthController {
 
     @PostMapping("/registration")
     public ResponseEntity<?> createNewUser(@RequestBody RegistartionUserDto registartionUserDto) {
-        registartionUserDto.setRole("ROLE_USER");
         return authService.createNewUser(registartionUserDto);
     }
 }

@@ -190,7 +190,7 @@
                     <label for="check"><span class="icon"></span> Keep me Signed in</label>
                 </div>
                 <div class="group">
-                    <button id="sign-in-btn" type="button" class="button" onclick="submitLoginForm()" value="Sign In">Sign up</button>
+                    <button id="sign-in-btn" type="button" class="button" onclick="submitLoginForm()" value="Sign In">Sign in</button>
                 </div>
                 <div class="hr"></div>
                 <div class="foot-lnk">
@@ -215,7 +215,7 @@
                     <input id="email" type="text" class="input">
                 </div>
                 <div class="group">
-                    <button id="sign-in-btn1" type="button" class="button" onclick="submitSignupForm()" value="Sign In">Sign up</button>
+                    <button id="sign-in-btn1" type="button" class="button" onclick="submitSignupForm()" value="Sign up">Sign up</button>
                 </div>
                 <div class="hr"></div>
 
@@ -243,8 +243,8 @@
     }
 
     function submitLoginForm() {
-        const username = document.getElementById('loginuser').value;
-        const password = document.getElementById('loginpass').value;
+        const username = document.getElementById('user').value;
+        const password = document.getElementById('pass').value;
 
         const loginData = {
             username: username,

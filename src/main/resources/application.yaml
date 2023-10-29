@@ -5,9 +5,6 @@ spring:
     password: qwe
     driver-class-name: org.postgresql.Driver
 
-  main:
-    allow-circular-references: true
-
   jpa:
     properties:
       hibernate:
