@@ -15,7 +15,7 @@ Spring Data Jpa
 Hibernate
 
 JWT
-
+й
 Thymeleaf
 
 Lombok
