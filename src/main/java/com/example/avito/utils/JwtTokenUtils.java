@@ -61,6 +61,7 @@ public class JwtTokenUtils {
     }
 
     public Long getUserIdFromToken() {
+
         String token = request.getHeader("Authorization");
         String jwt = token.substring(7);
 

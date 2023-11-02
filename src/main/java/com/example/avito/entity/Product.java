@@ -17,8 +17,8 @@ public class Product {
     private Long id;
 
     @NotNull
-    @Column(name = "id_creator")
-    private Long id_creator;
+    @Column(name = "idCreator")
+    private Long idCreator;
 
     @NotNull
     @Column(name = "price")
@@ -32,10 +32,10 @@ public class Product {
     private String city;
 
     @NotNull
-    @Column(name = "date_creation")
-    private Date date_creation;
+    @Column(name = "dateCreation")
+    private Date dateCreation;
 
     @Column(name = "description")
-    private Date description;
+    private String description;
 
 }

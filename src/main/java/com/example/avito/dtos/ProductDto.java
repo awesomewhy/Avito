@@ -8,11 +8,11 @@ import java.util.Date;
 @Data
 public class ProductDto {
 
-    private Long id_creator;
+    private Long idCreator;
     private BigDecimal price;
     private String type;
     private String city;
-    private Date date_creation;
-    private Date description;
+    private Date dateCreation;
+    private String description;
 
 }
