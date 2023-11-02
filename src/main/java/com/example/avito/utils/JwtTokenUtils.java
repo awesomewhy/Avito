@@ -4,6 +4,7 @@ package com.example.avito.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +22,8 @@ public class JwtTokenUtils {
 
     @Value("${jwt.lifetime}")
     private Duration jwtLifetime;
+
+    private HttpServletRequest request;
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
@@ -55,5 +58,17 @@ public class JwtTokenUtils {
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    public Long getUserIdFromToken() {
+        String token = request.getHeader("Authorization");
+        String jwt = token.substring(7);
+
+        Claims claims = Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(jwt)
+                .getBody();
+
+        return Long.parseLong(claims.getSubject());
     }
 }
