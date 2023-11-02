@@ -1,4 +1,4 @@
-package com.example.avito.Validation;
+package com.example.avito.validation;
 
 public class EmailValidation {
     public static boolean isValidEmail(String email) {

@@ -2,10 +2,14 @@ package com.example.avito.controllers;
 
 import com.example.avito.dtos.ProductDto;
 import com.example.avito.entity.Product;
-import com.example.avito.service.AddItem;
+import com.example.avito.entity.User;
 import com.example.avito.service.AdminService;
+import com.example.avito.service.ProductService;
 import com.example.avito.service.UserService;
+import com.example.avito.utils.JwtTokenUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,8 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     public final UserService userService;
-    public final AddItem addItem;
+    public final ProductService productService;
     public final AdminService adminService;
+    private final JwtTokenUtils jwtTokenUtils;
 
     @GetMapping("/unsecured")
     public String unsecuredData() {
@@ -36,7 +41,12 @@ public class UserController {
     }
 
     @PostMapping("/additem")
-    public Product sale(@RequestBody ProductDto productDto) {
-        return addItem.addItem(productDto);
+    public Product addProduct(@RequestBody ProductDto productDto) {
+        return productService.addItem(productDto);
+    }
+
+    @PostMapping("/update")
+    public User updateUser(@RequestBody User user) {
+        return userService.updateUser(user);
     }
 }

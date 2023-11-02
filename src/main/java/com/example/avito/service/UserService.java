@@ -12,4 +12,7 @@ public interface UserService extends UserDetailsService {
     Optional<User> findByUsername(String username);
     User createNewUser(RegistartionUserDto registartionUserDto);
     List<User> getAllPersons();
+    User getUserIdByUsername(String username);
+
+    User updateUser(User user);
 }

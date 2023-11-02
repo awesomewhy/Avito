@@ -39,7 +39,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChainUsersAPI(HttpSecurity httpSecurity) throws Exception {
         sharedSecurityConfiguration(httpSecurity);
         httpSecurity
-                .securityMatcher("/secured", "/info", "/login")
+                .securityMatcher("/secured", "/info", "/login", "/additem")
                 .authorizeHttpRequests(auth -> {
                     auth.anyRequest().authenticated();
                 })

@@ -10,12 +10,16 @@ import com.example.avito.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,6 +47,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserIdByUsername(String username) {
+        return userRepository.getUserIdByUsername(username);
+    }
+
+    @Override
+    @Transactional
+    public User updateUser(@RequestBody User user) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) authentication.getPrincipal();
+
+        User updateUser = getUserIdByUsername(username);
+
+        updateUser.setNickname(user.getNickname());
+        updateUser.setPassword(user.getPassword());
+        updateUser.setEmail(user.getEmail());
+        updateUser.setCity(user.getCity());
+
+        return userRepository.save(updateUser);
+
+
+    }
+
+    @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
@@ -61,6 +88,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(registartionUserDto.getUsername());
         user.setEmail(registartionUserDto.getEmail());
         user.setPassword(passwordEncoder.encode(registartionUserDto.getPassword()));
+        user.setCity(registartionUserDto.getCity());
         user.setRoles(List.of(roleService.getUserRole()));
         return userRepository.save(user);
 

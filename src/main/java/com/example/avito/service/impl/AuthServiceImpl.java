@@ -1,7 +1,7 @@
 package com.example.avito.service.impl;
 
-import com.example.avito.Validation.EmailValidation;
-import com.example.avito.Validation.PasswordValidation;
+import com.example.avito.validation.EmailValidation;
+import com.example.avito.validation.PasswordValidation;
 import com.example.avito.dtos.*;
 import com.example.avito.entity.User;
 import com.example.avito.exceptions.AppError;
@@ -16,10 +16,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import javax.validation.constraints.Email;
 
 @Service
 @RequiredArgsConstructor
@@ -54,12 +51,12 @@ public class AuthServiceImpl implements AuthService {
         if (userService.findByUsername(registartionUserDto.getUsername()).isPresent()) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с указанным именем уже существует"), HttpStatus.BAD_REQUEST);
         }
-        if(!EmailValidation.isValidEmail(registartionUserDto.getEmail())) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Неверно введенная почта"), HttpStatus.BAD_REQUEST);
-        }
-        if(!PasswordValidation.isvalidPassword(registartionUserDto.getPassword())) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пароль введет с недопустимыми символами или пароль скишком маленький"), HttpStatus.BAD_REQUEST);
-        }
+//        if(!EmailValidation.isValidEmail(registartionUserDto.getEmail())) {
+//            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Неверно введенная почта"), HttpStatus.BAD_REQUEST);
+//        }
+//        if(!PasswordValidation.isvalidPassword(registartionUserDto.getPassword())) {
+//            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пароль введет с недопустимыми символами или пароль скишком маленький"), HttpStatus.BAD_REQUEST);
+//        }
         User user = userService.createNewUser(registartionUserDto);
         return ResponseEntity.ok(new UserDto(user.getId(), user.getUsername(), user.getEmail()));
     }

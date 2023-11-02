@@ -1,13 +1,15 @@
 package com.example.avito.service.impl;
 
-import com.example.avito.confings.JwtRequestFilter;
-import com.example.avito.dtos.JwtRequest;
 import com.example.avito.dtos.ProductDto;
 import com.example.avito.entity.Product;
+import com.example.avito.entity.User;
 import com.example.avito.repository.ProductRepository;
-import com.example.avito.service.AddItem;
-import com.example.avito.utils.JwtTokenUtils;
+import com.example.avito.service.ProductService;
+import com.example.avito.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -15,23 +17,25 @@ import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
-public class AddItemImpl implements AddItem {
+public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-
+    private final UserService userService;
 
     @Override
     public Product addItem(@RequestBody ProductDto productDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) authentication.getPrincipal();
+
+        User user = userService.getUserIdByUsername(username);
 
         Product product = new Product();
-        product.setIdCreator(2L);
+        product.setIdCreator(user.getId());
         product.setPrice(productDto.getPrice());
         product.setType(productDto.getType());
-//        product.setCity(idCreator.getCity);
-        product.setCity("Moscow");
+        product.setCity(user.getCity());
         product.setDateCreation(new Date());
         product.setDescription(productDto.getDescription());
-
         return productRepository.save(product);
     }
 }

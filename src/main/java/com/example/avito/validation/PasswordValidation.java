@@ -1,6 +1,4 @@
-package com.example.avito.Validation;
-
-import javax.validation.constraints.Pattern;
+package com.example.avito.validation;
 
 public class PasswordValidation {
     public static boolean isvalidPassword(String email) {

@@ -8,12 +8,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenUtils {
@@ -31,7 +29,6 @@ public class JwtTokenUtils {
                 .map(GrantedAuthority::getAuthority)
                 .toList();
         claims.put("roles", roleList);
-        claims.put("username", userDetails.getUsername());
 
         Date issuedDate = new Date();
         Date expiredDate = new Date(issuedDate.getTime() + jwtLifetime.toMillis());
@@ -61,15 +58,14 @@ public class JwtTokenUtils {
     }
 
     public Long getUserIdFromToken() {
-
-        String token = request.getHeader("Authorization");
-        String jwt = token.substring(7);
+        String token = request.getHeader("Authorization"); // Assuming the token is passed in the Authorization header
+        String jwt = token.substring(7); // Remove the "Bearer " prefix from the token
 
         Claims claims = Jwts.parser()
-                .setSigningKey(secret)
+                .setSigningKey(secret) // Replace with your actual secret key
                 .parseClaimsJws(jwt)
                 .getBody();
 
-        return Long.parseLong(claims.getSubject());
+        return Long.parseLong(claims.getSubject()); // Assuming the user ID is stored as the subject in the token
     }
 }
