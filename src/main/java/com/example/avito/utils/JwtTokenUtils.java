@@ -43,14 +43,14 @@ public class JwtTokenUtils {
     }
 
     public String getUsername(String token) {
-        return getallClaimsFromToken(token).getSubject();
+        return getAllClaimsFromToken(token).getSubject();
     }
 
     public List<String> getRoles(String token) {
-        return getallClaimsFromToken(token).get("roles", List.class);
+        return getAllClaimsFromToken(token).get("roles", List.class);
     }
 
-    private Claims getallClaimsFromToken(String token) {
+    private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)

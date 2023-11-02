@@ -1,10 +1,10 @@
 package com.example.avito.service.impl;
 
+import com.example.avito.Validation.EmailValidation;
+import com.example.avito.Validation.PasswordValidation;
 import com.example.avito.dtos.*;
 import com.example.avito.entity.User;
 import com.example.avito.exceptions.AppError;
-import com.example.avito.repository.RoleRepository;
-import com.example.avito.repository.UserRepository;
 import com.example.avito.service.AuthService;
 import com.example.avito.service.UserService;
 import com.example.avito.utils.JwtTokenUtils;
@@ -15,10 +15,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.constraints.Email;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +53,12 @@ public class AuthServiceImpl implements AuthService {
         }
         if (userService.findByUsername(registartionUserDto.getUsername()).isPresent()) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с указанным именем уже существует"), HttpStatus.BAD_REQUEST);
+        }
+        if(!EmailValidation.isValidEmail(registartionUserDto.getEmail())) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Неверно введенная почта"), HttpStatus.BAD_REQUEST);
+        }
+        if(!PasswordValidation.isvalidPassword(registartionUserDto.getPassword())) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пароль введет с недопустимыми символами или пароль скишком маленький"), HttpStatus.BAD_REQUEST);
         }
         User user = userService.createNewUser(registartionUserDto);
         return ResponseEntity.ok(new UserDto(user.getId(), user.getUsername(), user.getEmail()));

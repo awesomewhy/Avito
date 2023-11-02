@@ -23,7 +23,7 @@ public class SecurityConfiguration {
 
     private final UserService userService;
     private final JwtRequestFilter jwtRequestFilter;
-    private final PasswordEncoderConfiguration passwordEncoder;
+    private final PasswordEncoderConfiguration passwordEncoderConfiguration;
 
     private void sharedSecurityConfiguration(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -88,7 +88,7 @@ public class SecurityConfiguration {
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder.passwordEncoder());
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoderConfiguration.passwordEncoder());
         daoAuthenticationProvider.setUserDetailsService(userService);
         return daoAuthenticationProvider;
     }
