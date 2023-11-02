@@ -60,13 +60,11 @@ public class UserServiceImpl implements UserService {
         User updateUser = getUserIdByUsername(username);
 
         updateUser.setNickname(user.getNickname());
-        updateUser.setPassword(user.getPassword());
+        updateUser.setPassword(passwordEncoder.encode(user.getPassword()));
         updateUser.setEmail(user.getEmail());
         updateUser.setCity(user.getCity());
 
         return userRepository.save(updateUser);
-
-
     }
 
     @Override

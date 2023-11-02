@@ -7,13 +7,13 @@ import com.example.avito.service.AdminService;
 import com.example.avito.service.ProductService;
 import com.example.avito.service.UserService;
 import com.example.avito.utils.JwtTokenUtils;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 @RestController
@@ -48,5 +48,11 @@ public class UserController {
     @PostMapping("/update")
     public User updateUser(@RequestBody User user) {
         return userService.updateUser(user);
+    }
+
+    @PostMapping("/getallproducts")
+    public String updateUser() {
+        List<Product> products = productService.getAllProducts();
+        return adminService.convertProductsToJson(products);
     }
 }

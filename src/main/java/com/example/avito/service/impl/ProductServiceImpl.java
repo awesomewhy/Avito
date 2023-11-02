@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +22,8 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final UserService userService;
+
+
 
     @Override
     public Product addItem(@RequestBody ProductDto productDto) {
@@ -38,4 +41,11 @@ public class ProductServiceImpl implements ProductService {
         product.setDescription(productDto.getDescription());
         return productRepository.save(product);
     }
+
+    @Override
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+
+
 }
