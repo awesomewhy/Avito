@@ -39,7 +39,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChainUsersAPI(HttpSecurity httpSecurity) throws Exception {
         sharedSecurityConfiguration(httpSecurity);
         httpSecurity
-                .securityMatcher("/secured")
+                .securityMatcher("/secured", "/info", "/login")
                 .authorizeHttpRequests(auth -> {
                     auth.anyRequest().authenticated();
                 })
@@ -47,39 +47,13 @@ public class SecurityConfiguration {
 
         return httpSecurity.build();
     }
-    @Bean
-    public SecurityFilterChain securityFilterChainInfoAPI(HttpSecurity httpSecurity) throws Exception {
-        sharedSecurityConfiguration(httpSecurity);
-        httpSecurity
-                .securityMatcher("/info")
-                .authorizeHttpRequests(auth -> {
-                    auth.anyRequest().authenticated();
-                })
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return httpSecurity.build();
-    }
-
     @Bean
     public SecurityFilterChain securityFilterChainAdminsAPI(HttpSecurity httpSecurity) throws Exception {
         sharedSecurityConfiguration(httpSecurity);
         httpSecurity
-                .securityMatcher("/admin")
+                .securityMatcher("/admin", "/getallusers")
                 .authorizeHttpRequests(auth -> {
                     auth.anyRequest().hasRole("ADMIN");
-                })
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return httpSecurity.build();
-    }
-
-    @Bean
-    public SecurityFilterChain securityFilterChainLoginAPI(HttpSecurity httpSecurity) throws Exception {
-        sharedSecurityConfiguration(httpSecurity);
-        httpSecurity
-                .securityMatcher("/login")
-                .authorizeHttpRequests(auth -> {
-                    auth.anyRequest().authenticated();
                 })
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
