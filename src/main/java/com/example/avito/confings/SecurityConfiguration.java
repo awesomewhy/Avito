@@ -51,7 +51,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChainAdminsAPI(HttpSecurity httpSecurity) throws Exception {
         sharedSecurityConfiguration(httpSecurity);
         httpSecurity
-                .securityMatcher("/admin", "/getallusers")
+                .securityMatcher("/admin", "/users")
                 .authorizeHttpRequests(auth -> {
                     auth.anyRequest().hasRole("ADMIN");
                 })

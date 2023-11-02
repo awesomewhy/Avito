@@ -6,6 +6,5 @@ import com.example.avito.entity.User;
 import java.util.List;
 
 public interface AdminService {
-    String convertUsersToJson(List<User> users);
-    String convertProductsToJson(List<Product> users);
+    <T> String convertObjectsToJson(List<T> objects);
 }

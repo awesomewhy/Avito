@@ -50,9 +50,9 @@ public class UserController {
         return userService.updateUser(user);
     }
 
-    @PostMapping("/getallproducts")
+    @PostMapping("/products")
     public String updateUser() {
         List<Product> products = productService.getAllProducts();
-        return adminService.convertProductsToJson(products);
+        return adminService.convertObjectsToJson(products);
     }
 }

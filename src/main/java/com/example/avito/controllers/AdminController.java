@@ -5,6 +5,7 @@ import com.example.avito.service.AdminService;
 import com.example.avito.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
@@ -15,10 +16,10 @@ import java.util.List;
 public class AdminController {
     private final AdminService adminService;
     private final UserService userService;
-    @GetMapping("/getallusers")
+    @PostMapping("/users")
     public String getAllUsers() {
         List<User> users = userService.getAllPersons();
-        return adminService.convertUsersToJson(users);
+        return adminService.convertObjectsToJson(users);
     }
 
     @GetMapping("/info")

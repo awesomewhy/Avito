@@ -12,21 +12,10 @@ import java.util.List;
 @Service
 public class AdminServiceImpl implements AdminService {
     @Override
-    public String convertUsersToJson(List<User> users) {
+    public <T> String convertObjectsToJson(List<T> objects) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            return objectMapper.writeValueAsString(users);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return "Error converting users to JSON";
-        }
-    }
-
-    @Override
-    public String convertProductsToJson(List<Product> products) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.writeValueAsString(products);
+            return objectMapper.writeValueAsString(objects);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "Error converting users to JSON";
