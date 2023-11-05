@@ -16,15 +16,10 @@ import java.util.List;
 public class AdminController {
     private final AdminService adminService;
     private final UserService userService;
-    @PostMapping("/users")
+    @GetMapping("/users")
     public String getAllUsers() {
         List<User> users = userService.getAllPersons();
         return adminService.convertObjectsToJson(users);
-    }
-
-    @GetMapping("/info")
-    public String userData(Principal principal) {
-        return principal.getName();
     }
 
     @GetMapping("/admin")

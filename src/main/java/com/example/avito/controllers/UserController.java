@@ -8,11 +8,10 @@ import com.example.avito.service.ProductService;
 import com.example.avito.service.UserService;
 import com.example.avito.utils.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 
@@ -23,7 +22,16 @@ public class UserController {
     public final UserService userService;
     public final ProductService productService;
     public final AdminService adminService;
-    private final JwtTokenUtils jwtTokenUtils;
+
+    @GetMapping("/info")
+    public String userData(Principal principal) {
+        return principal.getName();
+    }
+
+    @GetMapping("/getme")
+    public User getMyProfile() {
+        return userService.getMyProfile();
+    }
 
     @GetMapping("/unsecured")
     public String unsecuredData() {
@@ -40,19 +48,8 @@ public class UserController {
         return "secured data";
     }
 
-    @PostMapping("/additem")
-    public Product addProduct(@RequestBody ProductDto productDto) {
-        return productService.addItem(productDto);
-    }
-
     @PostMapping("/update")
     public User updateUser(@RequestBody User user) {
         return userService.updateUser(user);
-    }
-
-    @PostMapping("/products")
-    public String updateUser() {
-        List<Product> products = productService.getAllProducts();
-        return adminService.convertObjectsToJson(products);
     }
 }

@@ -21,8 +21,6 @@ public class JwtTokenUtils {
     @Value("${jwt.lifetime}")
     private Duration jwtLifetime;
 
-    private HttpServletRequest request;
-
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         List<String> roleList = userDetails.getAuthorities().stream()
@@ -42,7 +40,7 @@ public class JwtTokenUtils {
 
     }
 
-    public String getUsername(String token) {
+    public String getEmail(String token) {
         return getAllClaimsFromToken(token).getSubject();
     }
 
@@ -55,17 +53,5 @@ public class JwtTokenUtils {
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
-    }
-
-    public Long getUserIdFromToken() {
-        String token = request.getHeader("Authorization"); // Assuming the token is passed in the Authorization header
-        String jwt = token.substring(7); // Remove the "Bearer " prefix from the token
-
-        Claims claims = Jwts.parser()
-                .setSigningKey(secret) // Replace with your actual secret key
-                .parseClaimsJws(jwt)
-                .getBody();
-
-        return Long.parseLong(claims.getSubject()); // Assuming the user ID is stored as the subject in the token
     }
 }

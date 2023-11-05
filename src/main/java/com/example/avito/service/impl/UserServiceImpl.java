@@ -32,13 +32,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private final static String USER_NOT_FOUND_MSG = "user with email %s not found";
+
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
+
     @Override
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     @Override
@@ -47,18 +50,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserIdByUsername(String username) {
-        return userRepository.getUserIdByUsername(username);
+    public User getUserIdByEmail(String email) {
+        return userRepository.getUserIdByEmail(email);
     }
 
     @Override
     @Transactional
     public User updateUser(@RequestBody User user) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = (String) authentication.getPrincipal();
+        String email = (String) authentication.getPrincipal();
 
-        User updateUser = getUserIdByUsername(username);
-
+        User updateUser = getUserIdByEmail(email);
+        updateUser.setUsername(user.getUsername());
         updateUser.setNickname(user.getNickname());
         updateUser.setPassword(passwordEncoder.encode(user.getPassword()));
         updateUser.setEmail(user.getEmail());
@@ -68,13 +71,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getMyProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = (String) authentication.getPrincipal();
+
+        return getUserIdByEmail(email);
+    }
+
+    @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
-                String.format("Пользователь '%s' не найден", username)
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)
         ));
         return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
+                user.getEmail(),
                 user.getPassword(),
                 user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList())
         );
@@ -89,8 +100,9 @@ public class UserServiceImpl implements UserService {
         user.setCity(registartionUserDto.getCity());
         user.setRoles(List.of(roleService.getUserRole()));
         return userRepository.save(user);
-
     }
+
+
 
 
 }

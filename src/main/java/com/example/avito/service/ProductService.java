@@ -10,4 +10,8 @@ public interface ProductService{
     Product addItem(@RequestBody ProductDto productDto);
 
     List<Product> getAllProducts();
+
+    void deleteProductById(Long id);
+
+    List<Product> getMyProducts();
 }
