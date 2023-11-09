@@ -30,13 +30,13 @@ public class ProductServiceImpl implements ProductService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = (String) authentication.getPrincipal();
 
-        User user = userService.getUserIdByEmail(email);
+        Optional<User> user = userService.findByEmail(email);
 
         Product product = new Product();
-        product.setIdCreator(user.getId());
+        product.setIdCreator(user.get().getId());
         product.setPrice(productDto.getPrice());
         product.setType(productDto.getType());
-        product.setCity(user.getCity());
+        product.setCity(user.get().getCity());
         product.setDateCreation(new Date());
         product.setDescription(productDto.getDescription());
 
@@ -55,10 +55,10 @@ public class ProductServiceImpl implements ProductService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = (String) authentication.getPrincipal();
 
-        User user = userService.getUserIdByEmail(email);
+        Optional<User> user = userService.findByEmail(email);
 
         if(product.isPresent()) {
-            if (Objects.equals(product.get().getIdCreator(), user.getId())) {
+            if (Objects.equals(product.get().getIdCreator(), user.get().getId())) {
                 productRepository.deleteById(id);
                 return;
             }
@@ -72,10 +72,10 @@ public class ProductServiceImpl implements ProductService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = (String) authentication.getPrincipal();
 
-        User user = userService.getUserIdByEmail(email);
+        Optional<User> user = userService.findByEmail(email);
 
         return productRepository.findAll().stream()
-                .filter(product -> Objects.equals(product.getIdCreator(), user.getId()))
+                .filter(product -> Objects.equals(product.getIdCreator(), user.get().getId()))
                 .collect(Collectors.toList());
     }
 }

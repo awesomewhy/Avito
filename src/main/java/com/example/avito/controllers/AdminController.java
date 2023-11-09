@@ -15,10 +15,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminController {
     private final AdminService adminService;
-    private final UserService userService;
     @GetMapping("/users")
     public String getAllUsers() {
-        List<User> users = userService.getAllPersons();
+        List<User> users = adminService.getAllUsers();
         return adminService.convertObjectsToJson(users);
     }
 
