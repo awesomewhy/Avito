@@ -29,5 +29,3 @@ Postgres
 Maven
 
 Git
-
-Монолит
