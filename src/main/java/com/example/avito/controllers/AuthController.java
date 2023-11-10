@@ -1,6 +1,6 @@
 package com.example.avito.controllers;
 
-import com.example.avito.dtos.JwtRequest;
+import com.example.avito.dtos.JwtRequestDto;
 import com.example.avito.dtos.RegistartionUserDto;
 import com.example.avito.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/auth")
-    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
+    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequestDto authRequest) {
         return authService.createAuthToken(authRequest);
     }
 

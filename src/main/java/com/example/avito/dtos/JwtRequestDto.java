@@ -1,12 +1,12 @@
 package com.example.avito.dtos;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-public class RegisterRequest {
-
+@AllArgsConstructor
+public class JwtRequestDto {
+    private Long id;
     private String email;
-    private String name;
     private String password;
-
 }

@@ -1,18 +1,18 @@
 package com.example.avito.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
-import java.util.Set;
 
 @Entity
-@Data
 @Table(name = "users")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,11 +41,4 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Collection<Role> roles;
-    public User(String username, String nickname, String password, String email, String city) {
-        this.username = username;
-        this.nickname = nickname;
-        this.password = password;
-        this.email = email;
-        this.city = city;
-    }
 }

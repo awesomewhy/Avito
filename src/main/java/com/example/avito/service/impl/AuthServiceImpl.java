@@ -1,7 +1,5 @@
 package com.example.avito.service.impl;
 
-import com.example.avito.validation.EmailValidation;
-import com.example.avito.validation.PasswordValidation;
 import com.example.avito.dtos.*;
 import com.example.avito.entity.User;
 import com.example.avito.exceptions.AppError;
@@ -32,12 +30,12 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
 
     @Override
-    public boolean createUser(RegisterRequest signupRequest) {
+    public boolean createUser(RegisterRequestDto signupRequest) {
         return false;
     }
 
     @Override
-    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
+    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequestDto authRequest) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
         } catch (BadCredentialsException e) {
@@ -45,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
         }
         UserDetails userDetails = userService.loadUserByUsername(authRequest.getEmail());
         String token = jwtTokenUtils.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponse(token));
+        return ResponseEntity.ok(new JwtResponseDto(token));
     }
 
     @Override
