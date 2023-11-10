@@ -9,9 +9,12 @@ import com.example.avito.service.AdminService;
 import com.example.avito.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,8 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;

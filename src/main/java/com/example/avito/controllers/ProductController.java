@@ -19,6 +19,8 @@ public class ProductController {
     public String getMyProducts() {
         List<Product> products = productService.getMyProducts();
         return adminService.convertObjectsToJson(products);
+
+        //return productService.getMyProducts();
     }
 
     @GetMapping("/products")

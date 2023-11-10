@@ -6,7 +6,9 @@ import com.example.avito.repository.UserRepository;
 import com.example.avito.service.RoleService;
 import com.example.avito.service.UserService;
 import jakarta.transaction.Transactional;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +25,8 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class UserServiceImpl implements UserService {
 
     private final static String USER_NOT_FOUND_MSG = "user with email %s not found";
@@ -38,24 +42,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public User updateUser(@RequestBody User user) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = (String) authentication.getPrincipal();
 
         Optional<User> updateUser1 = findByEmail(email);
-        if(updateUser1.isPresent()) {
-            User updateUser = updateUser1.get();
+        updateUser1.ifPresent(updateUser -> {
             updateUser.setUsername(user.getUsername());
             updateUser.setNickname(user.getNickname());
             updateUser.setPassword(passwordEncoder.encode(user.getPassword()));
             updateUser.setEmail(user.getEmail());
             updateUser.setCity(user.getCity());
-            return userRepository.save(updateUser);
-        } else {
-            System.out.println("данные не сохранились");
-            return null;
-        }
+            userRepository.save(updateUser);
+        });
+        return null;
     }
 
     @Override

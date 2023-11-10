@@ -6,7 +6,10 @@ import com.example.avito.entity.User;
 import com.example.avito.repository.ProductRepository;
 import com.example.avito.service.ProductService;
 import com.example.avito.service.UserService;
+import jakarta.transaction.Transactional;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -19,11 +22,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductRepository productRepository;
-    private final UserService userService;
+    ProductRepository productRepository;
+    UserService userService;
 
     @Override
     public Product addItem(@RequestBody ProductDto productDto) {
@@ -72,10 +77,10 @@ public class ProductServiceImpl implements ProductService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = (String) authentication.getPrincipal();
 
-        Optional<User> user = userService.findByEmail(email);
 
-        return productRepository.findAll().stream()
-                .filter(product -> Objects.equals(product.getIdCreator(), user.get().getId()))
-                .collect(Collectors.toList());
+        Optional<User> user = userService.findByEmail(email);
+        User currentUser = user.orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+
+        return productRepository.findAllByIdCreator(currentUser.getId());
     }
 }

@@ -8,7 +8,10 @@ import com.example.avito.exceptions.AppError;
 import com.example.avito.service.AuthService;
 import com.example.avito.service.UserService;
 import com.example.avito.utils.JwtTokenUtils;
+import jakarta.transaction.Transactional;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class AuthServiceImpl implements AuthService {
 
     private final UserService userService;

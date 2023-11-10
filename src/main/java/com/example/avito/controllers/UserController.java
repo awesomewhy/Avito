@@ -19,9 +19,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserController {
 
-    public final UserService userService;
-    public final ProductService productService;
-    public final AdminService adminService;
+    private final UserService userService;
+    private final AdminService adminService;
 
     @GetMapping("/sortbycity")
     public List<Product> sortByCity() {
