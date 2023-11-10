@@ -2,7 +2,7 @@ Avito:
 
 Java 17
 
-Spring MVC
+REST API
 
 Spring Boot
 
