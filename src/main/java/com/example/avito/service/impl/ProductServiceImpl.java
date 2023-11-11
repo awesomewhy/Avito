@@ -1,5 +1,6 @@
 package com.example.avito.service.impl;
 
+import com.example.avito.dtos.MyProductDto;
 import com.example.avito.dtos.ProductDto;
 import com.example.avito.entity.Product;
 import com.example.avito.entity.User;
@@ -15,11 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 @Transactional
@@ -37,15 +34,19 @@ public class ProductServiceImpl implements ProductService {
 
         Optional<User> user = userService.findByEmail(email);
 
-        Product product = new Product();
-        product.setIdCreator(user.get().getId());
-        product.setPrice(productDto.getPrice());
-        product.setType(productDto.getType());
-        product.setCity(user.get().getCity());
-        product.setDateCreation(new Date());
-        product.setDescription(productDto.getDescription());
+        if (user.isPresent()) {
+            Product product = new Product();
+            product.setIdCreator(user.get());
+            product.setPrice(productDto.getPrice());
+            product.setType(productDto.getType());
+            product.setCity(user.get().getCity());
+            product.setDateCreation(new Date());
+            product.setDescription(productDto.getDescription());
 
-        return productRepository.save(product);
+            return productRepository.save(product);
+        } else {
+            throw new RuntimeException("User not found");
+        }
     }
 
     @Override
@@ -73,14 +74,30 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getMyProducts() {
+    public List<MyProductDto> getMyProducts() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = (String) authentication.getPrincipal();
 
 
         Optional<User> user = userService.findByEmail(email);
         User currentUser = user.orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+        List<Product> products = productRepository.findAllByIdCreator(currentUser);
 
-        return productRepository.findAllByIdCreator(currentUser.getId());
+        return getMyProductDtos(products);
+    }
+
+    private static List<MyProductDto> getMyProductDtos(List<Product> products) {
+        List<MyProductDto> MyProductDto = new ArrayList<>();
+        for (Product product : products) {
+            MyProductDto myProductDto = new MyProductDto();
+            myProductDto.setCity(product.getCity());
+            myProductDto.setType(product.getType());
+            myProductDto.setPrice(product.getPrice());
+            myProductDto.setDateCreation(String.valueOf(product.getDateCreation()));
+            myProductDto.setDescription(product.getDescription());
+
+            MyProductDto.add(myProductDto);
+        }
+        return MyProductDto;
     }
 }

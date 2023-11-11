@@ -1,5 +1,6 @@
 package com.example.avito.controllers;
 
+import com.example.avito.dtos.MyProductDto;
 import com.example.avito.dtos.ProductDto;
 import com.example.avito.entity.Product;
 import com.example.avito.service.AdminService;
@@ -16,11 +17,11 @@ public class ProductController {
     private final ProductService productService;
     private final AdminService adminService;
     @GetMapping("/getmyproducts")
-    public String getMyProducts() {
-        List<Product> products = productService.getMyProducts();
-        return adminService.convertObjectsToJson(products);
+    public List<MyProductDto> getMyProducts() {
+//        List<Product> products = productService.getMyProducts();
+//        return adminService.convertObjectsToJson(products);
 
-        //return productService.getMyProducts();
+        return productService.getMyProducts();
     }
 
     @GetMapping("/products")

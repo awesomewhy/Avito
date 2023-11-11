@@ -20,9 +20,9 @@ public class Product {
     @NotNull
     private Long id;
 
-    @NotNull
-    @Column(name = "idCreator")
-    private Long idCreator;
+    @ManyToOne
+    @JoinColumn(name = "idCreator")
+    private User idCreator;
 
     @NotNull
     @Column(name = "price")

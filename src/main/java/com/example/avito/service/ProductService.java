@@ -1,5 +1,6 @@
 package com.example.avito.service;
 
+import com.example.avito.dtos.MyProductDto;
 import com.example.avito.dtos.ProductDto;
 import com.example.avito.entity.Product;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,5 +14,5 @@ public interface ProductService{
 
     void deleteProductById(Long id);
 
-    List<Product> getMyProducts();
+    List<MyProductDto> getMyProducts();
 }

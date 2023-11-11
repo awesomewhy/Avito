@@ -1,7 +1,7 @@
 package com.example.avito.controllers;
 
 import com.example.avito.dtos.JwtRequestDto;
-import com.example.avito.dtos.RegistartionUserDto;
+import com.example.avito.dtos.RegistrationUserDto;
 import com.example.avito.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<?> createNewUser(@RequestBody RegistartionUserDto registartionUserDto) {
+    public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDto registartionUserDto) {
         return authService.createNewUser(registartionUserDto);
     }
 }

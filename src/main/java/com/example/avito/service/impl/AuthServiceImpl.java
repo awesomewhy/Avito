@@ -47,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ResponseEntity<?> createNewUser(@RequestBody RegistartionUserDto registartionUserDto) {
+    public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDto registartionUserDto) {
         if (!registartionUserDto.getPassword().equals(registartionUserDto.getConfirmPassword())) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пароли не совпали"), HttpStatus.UNAUTHORIZED);
         }

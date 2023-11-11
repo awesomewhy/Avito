@@ -1,6 +1,6 @@
 package com.example.avito.service.impl;
 
-import com.example.avito.dtos.RegistartionUserDto;
+import com.example.avito.dtos.RegistrationUserDto;
 import com.example.avito.entity.User;
 import com.example.avito.repository.UserRepository;
 import com.example.avito.service.RoleService;
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createNewUser(RegistartionUserDto registartionUserDto) {
+    public User createNewUser(RegistrationUserDto registartionUserDto) {
         User user = new User();
         user.setUsername(registartionUserDto.getUsername());
         user.setEmail(registartionUserDto.getEmail());
