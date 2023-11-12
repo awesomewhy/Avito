@@ -39,7 +39,7 @@ public class ProductController {
     }
 
     @PostMapping("/delete/{id}")
-    public void deleteProduct(@AuthenticationPrincipal String email, @PathVariable Long id) {
-        productService.deleteProductById(email, id);
+    public ResponseEntity<?> deleteProduct(@AuthenticationPrincipal String email, @PathVariable Long id) {
+        return productService.deleteProductById(email, id);
     }
 }

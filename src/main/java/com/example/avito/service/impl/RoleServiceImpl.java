@@ -16,11 +16,16 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
+    private final static String ROLE_USER = "ROLE_USER";
+    private final static String ROLE_ADMIN = "ROLE_ADMIN";
+
 
     public Role getUserRole() {
-        return roleRepository.findByName("ROLE_USER").get();
+        return roleRepository.findByName(ROLE_USER)
+                .orElseThrow(() -> new RuntimeException("User role not found"));
     }
     public Role getAdminRole() {
-        return roleRepository.findByName("ROLE_ADMIN").get();
+        return roleRepository.findByName(ROLE_ADMIN)
+                .orElseThrow(() -> new RuntimeException("Admin role not found"));
     }
 }

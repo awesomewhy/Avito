@@ -7,15 +7,12 @@ import com.example.avito.entity.User;
 import com.example.avito.repository.ProductRepository;
 import com.example.avito.repository.UserRepository;
 import com.example.avito.service.ProductService;
-import com.example.avito.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -29,10 +26,12 @@ public class ProductServiceImpl implements ProductService {
 
     private final static String USER_NOT_FOUND = "Пользователь не найден";
     private final static String PRODUCT_ADDED_SUCCESSFULLY = "Продукт успешно добавлен";
+    private final static String PRODUCT_DELETED_SUCCESSFULLY = "Продукт успешно удален";
     private final static String PRODUCT_NOT_ADDED = "Продукт не добавлен";
+    private final static String PRODUCT_NOT_FOUND = "У вас нет такого предмета в продаже";
 
-    ProductRepository productRepository;
-    UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
     @Override
     public ResponseEntity<?> addItem(@AuthenticationPrincipal String email, @RequestBody ProductDto productDto) {
@@ -59,18 +58,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteProductById(@AuthenticationPrincipal String email, Long id) {
+    public ResponseEntity<?> deleteProductById(@AuthenticationPrincipal String email, Long id) {
         Optional<Product> product = productRepository.findById(id);
         Optional<User> user = userRepository.findByEmail(email);
 
         if (product.isPresent() && user.isPresent()) {
             if (product.get().getIdCreator().getId().equals(user.get().getId())) {
                 productRepository.deleteById(id);
-                return;
+                return ResponseEntity.ok().body(PRODUCT_DELETED_SUCCESSFULLY);
             }
-            System.out.println("У вас нет такого предмета в продаже");
+            return ResponseEntity.ok().body(PRODUCT_NOT_FOUND);
+        } else {
+            return ResponseEntity.ok().body(PRODUCT_NOT_FOUND);
         }
-
     }
 
     @Override

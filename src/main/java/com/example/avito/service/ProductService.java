@@ -14,7 +14,7 @@ public interface ProductService{
 
     List<Product> getAllProducts();
 
-    void deleteProductById(@AuthenticationPrincipal String email, Long id);
+    ResponseEntity<?> deleteProductById(@AuthenticationPrincipal String email, Long id);
 
     List<MyProductDto> getMyProducts(@AuthenticationPrincipal String email);
 }
