@@ -2,6 +2,7 @@ package com.example.avito.controllers;
 
 import com.example.avito.dtos.ChangePasswordDto;
 import com.example.avito.dtos.DeleteProfileDto;
+import com.example.avito.dtos.MyProfileDto;
 import com.example.avito.dtos.UpdateUserDto;
 import com.example.avito.entity.Product;
 import com.example.avito.entity.User;
@@ -9,6 +10,7 @@ import com.example.avito.service.AdminService;
 import com.example.avito.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -35,22 +37,22 @@ public class UserController {
     }
 
     @GetMapping("/getme")
-    public Optional<User> getMyProfile() {
-        return userService.getMyProfile();
+    public Optional<MyProfileDto> getMyProfile(@AuthenticationPrincipal String email) {
+        return userService.getMyProfile(email);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> updateUser(@RequestBody UpdateUserDto updateUserDto) {
-        return userService.updateUser(updateUserDto);
+    public ResponseEntity<?> updateUser(@AuthenticationPrincipal String email, @RequestBody UpdateUserDto updateUserDto) {
+        return userService.updateUser(email, updateUserDto);
     }
 
     @PostMapping("/changepassword")
-    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
-        return userService.changePassword(changePasswordDto);
+    public ResponseEntity<?> changePassword(@AuthenticationPrincipal String email, @RequestBody ChangePasswordDto changePasswordDto) {
+        return userService.changePassword(email, changePasswordDto);
     }
     @PostMapping("/deleteprofile")
-    public ResponseEntity<?> deleteProfile(@RequestBody DeleteProfileDto deleteProfileDto) {
-        return userService.deleteProfile(deleteProfileDto);
+    public ResponseEntity<?> deleteProfile(@AuthenticationPrincipal String email, @RequestBody DeleteProfileDto deleteProfileDto) {
+        return userService.deleteProfile(email, deleteProfileDto);
     }
 
 }

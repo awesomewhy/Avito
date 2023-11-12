@@ -5,13 +5,16 @@ import com.example.avito.dtos.ProductDto;
 import com.example.avito.entity.Product;
 import com.example.avito.entity.User;
 import com.example.avito.repository.ProductRepository;
+import com.example.avito.repository.UserRepository;
 import com.example.avito.service.ProductService;
 import com.example.avito.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,14 +28,11 @@ import java.util.*;
 public class ProductServiceImpl implements ProductService {
 
     ProductRepository productRepository;
-    UserService userService;
+    UserRepository userRepository;
 
     @Override
-    public Product addItem(@RequestBody ProductDto productDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = (String) authentication.getPrincipal();
-
-        Optional<User> user = userService.findByEmail(email);
+    public ResponseEntity<?> addItem(@AuthenticationPrincipal String email, @RequestBody ProductDto productDto) {
+        Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isPresent()) {
             Product product = new Product();
@@ -42,8 +42,8 @@ public class ProductServiceImpl implements ProductService {
             product.setCity(user.get().getCity());
             product.setDateCreation(new Date());
             product.setDescription(productDto.getDescription());
-
-            return productRepository.save(product);
+            productRepository.save(product);
+            return ResponseEntity.ok().body("продукт успешно добавлен");
         } else {
             throw new RuntimeException("User not found");
         }
@@ -55,13 +55,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteProductById(Long id) {
+    public void deleteProductById(@AuthenticationPrincipal String email, Long id) {
         Optional<Product> product = productRepository.findById(id);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = (String) authentication.getPrincipal();
-
-        Optional<User> user = userService.findByEmail(email);
+        Optional<User> user = userRepository.findByEmail(email);
 
         if(product.isPresent()) {
             if (Objects.equals(product.get().getIdCreator(), user.get().getId())) {
@@ -74,12 +71,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<MyProductDto> getMyProducts() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = (String) authentication.getPrincipal();
-
-
-        Optional<User> user = userService.findByEmail(email);
+    public List<MyProductDto> getMyProducts(@AuthenticationPrincipal String email) {
+        Optional<User> user = userRepository.findByEmail(email);
         User currentUser = user.orElseThrow(() -> new RuntimeException("Пользователь не найден"));
         List<Product> products = productRepository.findAllByIdCreator(currentUser);
 

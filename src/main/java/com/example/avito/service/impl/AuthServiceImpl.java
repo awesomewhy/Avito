@@ -3,6 +3,7 @@ package com.example.avito.service.impl;
 import com.example.avito.dtos.*;
 import com.example.avito.entity.User;
 import com.example.avito.exceptions.AppError;
+import com.example.avito.repository.UserRepository;
 import com.example.avito.service.AuthService;
 import com.example.avito.service.UserService;
 import com.example.avito.utils.JwtTokenUtils;
@@ -28,6 +29,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserService userService;
     private final JwtTokenUtils jwtTokenUtils;
     private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
 
     @Override
     public boolean createUser(RegisterRequestDto signupRequest) {
@@ -47,11 +49,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDto registartionUserDto) {
-        if (!registartionUserDto.getPassword().equals(registartionUserDto.getConfirmPassword())) {
+    public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDto registrationUserDto) {
+        if (!registrationUserDto.getPassword().equals(registrationUserDto.getConfirmPassword())) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пароли не совпали"), HttpStatus.UNAUTHORIZED);
         }
-        if (userService.findByEmail(registartionUserDto.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(registrationUserDto.getEmail()).isPresent()) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с указанным email уже существует"), HttpStatus.BAD_REQUEST);
         }
 //        if(!EmailValidation.isValidEmailAddress(registartionUserDto.getEmail())) {
@@ -60,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
 //        if(!PasswordValidation.isValidPassword(registartionUserDto.getPassword())) {
 //            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пароль введет с недопустимыми символами или пароль скишком маленький"), HttpStatus.BAD_REQUEST);
 //        }
-        User user = userService.createNewUser(registartionUserDto);
+        User user = userService.createNewUser(registrationUserDto);
         return ResponseEntity.ok(new UserDto(user.getId(), user.getUsername(), user.getEmail()));
     }
 }

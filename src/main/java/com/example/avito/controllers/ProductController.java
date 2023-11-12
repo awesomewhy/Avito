@@ -6,6 +6,8 @@ import com.example.avito.entity.Product;
 import com.example.avito.service.AdminService;
 import com.example.avito.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +20,11 @@ public class ProductController {
     private final ProductService productService;
     private final AdminService adminService;
     @GetMapping("/myproducts")
-    public List<MyProductDto> getMyProducts() {
+    public List<MyProductDto> getMyProducts(@AuthenticationPrincipal String email) {
 //        List<Product> products = productService.getMyProducts();
 //        return adminService.convertObjectsToJson(products);
 
-        return productService.getMyProducts();
+        return productService.getMyProducts(email);
     }
 
     @GetMapping("/products")
@@ -32,12 +34,12 @@ public class ProductController {
     }
 
     @PostMapping("/additem")
-    public Product addProduct(@RequestBody ProductDto productDto) {
-        return productService.addItem(productDto);
+    public ResponseEntity<?> addProduct(@AuthenticationPrincipal String email, @RequestBody ProductDto productDto) {
+        return productService.addItem(email, productDto);
     }
 
     @PostMapping("/delete/{id}")
-    public void deleteProduct(@PathVariable Long id) {
-        productService.deleteProductById(id);
+    public void deleteProduct(@AuthenticationPrincipal String email, @PathVariable Long id) {
+        productService.deleteProductById(email, id);
     }
 }

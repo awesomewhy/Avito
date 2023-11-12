@@ -1,9 +1,6 @@
 package com.example.avito.service.impl;
 
-import com.example.avito.dtos.ChangePasswordDto;
-import com.example.avito.dtos.DeleteProfileDto;
-import com.example.avito.dtos.RegistrationUserDto;
-import com.example.avito.dtos.UpdateUserDto;
+import com.example.avito.dtos.*;
 import com.example.avito.entity.User;
 import com.example.avito.exceptions.AppError;
 import com.example.avito.repository.UserRepository;
@@ -16,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,40 +39,47 @@ public class UserServiceImpl implements UserService {
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
-
     @Override
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
+    public ResponseEntity<?> updateUser(@AuthenticationPrincipal String email, @RequestBody UpdateUserDto updateUserDto) {
+        Optional<User> updateUser = userRepository.findByEmail(email);
+        if (updateUser.isPresent()) {
+            if (userRepository.findByEmail(updateUserDto.getEmail()).isPresent()) {
+                return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с указанным email уже существует"), HttpStatus.BAD_REQUEST);
+            }
 
-    @Override
-    public ResponseEntity<?> updateUser(@RequestBody UpdateUserDto updateUserDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = (String) authentication.getPrincipal();
-
-        Optional<User> updateUser = findByEmail(email);
-        updateUser.ifPresent(user -> {
+            User user = updateUser.get();
             user.setUsername(updateUserDto.getUsername());
             user.setNickname(updateUserDto.getNickname());
             user.setEmail(updateUserDto.getEmail());
             user.setCity(updateUserDto.getCity());
             userRepository.save(user);
-        });
-        return null;
+
+            return ResponseEntity.ok().body("Пользователь сохранен");
+        } else {
+            return ResponseEntity.badRequest().body("Пользователь не найден");
+        }
     }
 
     @Override
-    public Optional<User> getMyProfile() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = (String) authentication.getPrincipal();
-
-        return userRepository.findByEmail(email);
+    public Optional<MyProfileDto> getMyProfile(@AuthenticationPrincipal String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            MyProfileDto myProfileDto = new MyProfileDto();
+            myProfileDto.setUsername(user.getUsername());
+            myProfileDto.setNickname(user.getNickname());
+            myProfileDto.setEmail(user.getEmail());
+            myProfileDto.setCity(user.getCity());
+            return Optional.of(myProfileDto);
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)
                 ));
         return new org.springframework.security.core.userdetails.User(
@@ -96,11 +101,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = (String) authentication.getPrincipal();
-
-        Optional<User> updateUser = findByEmail(email);
+    public ResponseEntity<?> changePassword(@AuthenticationPrincipal String email, @RequestBody ChangePasswordDto changePasswordDto) {
+        Optional<User> updateUser = userRepository.findByEmail(email);
 
         if (updateUser.isPresent() && passwordEncoder.matches(changePasswordDto.getOldPassword(), updateUser.get().getPassword())) {
             if(passwordEncoder.matches(changePasswordDto.getNewPassword(), updateUser.get().getPassword())) {
@@ -119,11 +121,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> deleteProfile(@RequestBody DeleteProfileDto deleteProfileDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = (String) authentication.getPrincipal();
-
-        Optional<User> deleteUser = findByEmail(email);
+    public ResponseEntity<?> deleteProfile(@AuthenticationPrincipal String email, @RequestBody DeleteProfileDto deleteProfileDto) {
+        Optional<User> deleteUser = userRepository.findByEmail(email);
 
         if (deleteUser.isPresent() && passwordEncoder.matches(deleteUser.get().getPassword(), deleteProfileDto.getPassword())) {
             userRepository.delete(deleteUser.get());
