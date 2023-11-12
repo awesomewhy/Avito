@@ -1,9 +1,7 @@
 package com.example.avito.dtos;
 
 import com.example.avito.entity.User;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
@@ -11,6 +9,7 @@ import java.util.Date;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ProductDto {
     private User idCreator;
     private BigDecimal price;
