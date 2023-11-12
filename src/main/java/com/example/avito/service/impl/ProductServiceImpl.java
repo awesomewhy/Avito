@@ -1,7 +1,9 @@
 package com.example.avito.service.impl;
 
 import com.example.avito.dtos.MyProductDto;
-import com.example.avito.dtos.ProductDto;
+import com.example.avito.dtos.PriceSortDto;
+import com.example.avito.dtos.ProductSellDto;
+import com.example.avito.dtos.ProductShowDto;
 import com.example.avito.entity.Product;
 import com.example.avito.entity.User;
 import com.example.avito.repository.ProductRepository;
@@ -16,7 +18,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -29,12 +33,13 @@ public class ProductServiceImpl implements ProductService {
     private final static String PRODUCT_DELETED_SUCCESSFULLY = "Продукт успешно удален";
     private final static String PRODUCT_NOT_ADDED = "Продукт не добавлен";
     private final static String PRODUCT_NOT_FOUND = "У вас нет такого предмета в продаже";
+    private final static String START_PRICE_AND_END_PRICE_MUST_BE_PROVIDED = "Необходимо указать начальную и конечную цену";
 
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
     @Override
-    public ResponseEntity<?> addItem(@AuthenticationPrincipal String email, @RequestBody ProductDto productDto) {
+    public ResponseEntity<?> addItem(@AuthenticationPrincipal String email, @RequestBody ProductSellDto productDto) {
         Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isPresent()) {
@@ -55,6 +60,35 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getAllProducts() {
         return productRepository.findAll();
+    }
+
+    @Override
+    public List<ProductShowDto> sortProductsByCity() {
+        return productRepository.findAll().stream()
+                .filter(p -> p.getCity().equals("London"))
+                .map(this::convertToProductShowDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductShowDto> sortByPrice(PriceSortDto priceSortDto) throws Exception {
+        if (priceSortDto.getStartPrice() == null || priceSortDto.getEndPrice() == null) {
+            throw new IllegalArgumentException(START_PRICE_AND_END_PRICE_MUST_BE_PROVIDED);
+        }
+        return productRepository.findAll().stream()
+                .filter(p -> p.getPrice().compareTo(priceSortDto.getStartPrice()) >= 0 && p.getPrice().compareTo(priceSortDto.getEndPrice()) <= 0)
+                .map(this::convertToProductShowDto)
+                .collect(Collectors.toList());
+    }
+
+    private ProductShowDto convertToProductShowDto(Product product) {
+        ProductShowDto productShowDto = new ProductShowDto();
+        productShowDto.setCity(product.getCity());
+        productShowDto.setCity(product.getCity());
+        productShowDto.setPrice(product.getPrice());
+        productShowDto.setType(product.getType());
+        productShowDto.setDescription(product.getDescription());
+        return productShowDto;
     }
 
     @Override

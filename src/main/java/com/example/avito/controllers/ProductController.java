@@ -1,7 +1,7 @@
 package com.example.avito.controllers;
 
 import com.example.avito.dtos.MyProductDto;
-import com.example.avito.dtos.ProductDto;
+import com.example.avito.dtos.ProductSellDto;
 import com.example.avito.entity.Product;
 import com.example.avito.service.AdminService;
 import com.example.avito.service.ProductService;
@@ -34,7 +34,7 @@ public class ProductController {
     }
 
     @PostMapping("/additem")
-    public ResponseEntity<?> addProduct(@AuthenticationPrincipal String email, @RequestBody ProductDto productDto) {
+    public ResponseEntity<?> addProduct(@AuthenticationPrincipal String email, @RequestBody ProductSellDto productDto) {
         return productService.addItem(email, productDto);
     }
 

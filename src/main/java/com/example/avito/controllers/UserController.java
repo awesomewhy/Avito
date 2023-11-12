@@ -1,12 +1,8 @@
 package com.example.avito.controllers;
 
-import com.example.avito.dtos.ChangePasswordDto;
-import com.example.avito.dtos.DeleteProfileDto;
-import com.example.avito.dtos.MyProfileDto;
-import com.example.avito.dtos.UpdateUserDto;
+import com.example.avito.dtos.*;
 import com.example.avito.entity.Product;
-import com.example.avito.entity.User;
-import com.example.avito.service.AdminService;
+import com.example.avito.service.ProductService;
 import com.example.avito.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,11 +20,16 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-    private final AdminService adminService;
+    private final ProductService productService;
 
     @GetMapping("/sortbycity")
-    public List<Product> sortByCity() {
-        return adminService.sortProductsByCity();
+    public List<ProductShowDto> sortByCity() {
+        return productService.sortProductsByCity();
+    }
+
+    @GetMapping("/sortbyprice")
+    public List<ProductShowDto> sortByPrice(@RequestBody PriceSortDto priceSortDto) throws Exception{
+        return productService.sortByPrice(priceSortDto);
     }
 
     @GetMapping("/info")

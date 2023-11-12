@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
-    private final ProductRepository productRepository;
     @Override
     public <T> String convertObjectsToJson(List<T> objects) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -44,10 +43,5 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<User> getAllUsers() {
         return adminRepository.findAll();
-    }
-
-    @Override
-    public List<Product> sortProductsByCity() {
-        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "city"));
     }
 }

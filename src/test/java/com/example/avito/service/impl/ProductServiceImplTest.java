@@ -1,7 +1,7 @@
 package com.example.avito.service.impl;
 
 import com.example.avito.dtos.MyProductDto;
-import com.example.avito.dtos.ProductDto;
+import com.example.avito.dtos.ProductSellDto;
 import com.example.avito.entity.Product;
 import com.example.avito.entity.User;
 import com.example.avito.repository.ProductRepository;
@@ -37,7 +37,7 @@ public class ProductServiceImplTest {
 
     private User user;
     private Product product;
-    private ProductDto productDto;
+    private ProductSellDto productDto;
 
     @BeforeEach
     public void setUp() {
@@ -54,7 +54,7 @@ public class ProductServiceImplTest {
         product.setDateCreation(new Date());
         product.setDescription("test description");
 
-        productDto = new ProductDto();
+        productDto = new ProductSellDto();
         productDto.setIdCreator(user);
         productDto.setPrice(new BigDecimal("100.00"));
         productDto.setType("test");

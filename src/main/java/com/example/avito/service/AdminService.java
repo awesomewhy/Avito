@@ -8,5 +8,4 @@ import java.util.List;
 public interface AdminService {
     <T> String convertObjectsToJson(List<T> objects);
     List<User> getAllUsers();
-    List<Product> sortProductsByCity();
 }
