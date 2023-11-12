@@ -12,11 +12,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/product")
 public class ProductController {
 
     private final ProductService productService;
     private final AdminService adminService;
-    @GetMapping("/getmyproducts")
+    @GetMapping("/myproducts")
     public List<MyProductDto> getMyProducts() {
 //        List<Product> products = productService.getMyProducts();
 //        return adminService.convertObjectsToJson(products);

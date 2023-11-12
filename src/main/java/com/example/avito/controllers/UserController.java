@@ -1,10 +1,14 @@
 package com.example.avito.controllers;
 
+import com.example.avito.dtos.ChangePasswordDto;
+import com.example.avito.dtos.DeleteProfileDto;
+import com.example.avito.dtos.UpdateUserDto;
 import com.example.avito.entity.Product;
 import com.example.avito.entity.User;
 import com.example.avito.service.AdminService;
 import com.example.avito.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -14,6 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -34,23 +39,18 @@ public class UserController {
         return userService.getMyProfile();
     }
 
-    @GetMapping("/unsecured")
-    public String unsecuredData() {
-        return "unsecured data";
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "login data";
-    }
-
-    @GetMapping("/secured")
-    public String securedData() {
-        return "secured data";
-    }
-
     @PostMapping("/update")
-    public User updateUser(@RequestBody User user) {
-        return userService.updateUser(user);
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUserDto updateUserDto) {
+        return userService.updateUser(updateUserDto);
     }
+
+    @PostMapping("/changepassword")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
+        return userService.changePassword(changePasswordDto);
+    }
+    @PostMapping("/deleteprofile")
+    public ResponseEntity<?> deleteProfile(@RequestBody DeleteProfileDto deleteProfileDto) {
+        return userService.deleteProfile(deleteProfileDto);
+    }
+
 }
