@@ -26,6 +26,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class AuthServiceImpl implements AuthService {
 
+    private final static String USER_WHIT_THIS_EMAIL_EXIST = "user with email %s not found";
+    private final static String PASSWORDS_DID_NOT_MATCH = "пароли не совпали";
+    private final static String INCORRECT_LOGIN_OR_PASSWORD = "неправильный логин или пароль";
+
+
     private final UserService userService;
     private final JwtTokenUtils jwtTokenUtils;
     private final AuthenticationManager authenticationManager;
@@ -41,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
         } catch (BadCredentialsException e) {
-            return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), "неправильный логин или пароль"), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), INCORRECT_LOGIN_OR_PASSWORD), HttpStatus.UNAUTHORIZED);
         }
         UserDetails userDetails = userService.loadUserByUsername(authRequest.getEmail());
         String token = jwtTokenUtils.generateToken(userDetails);
@@ -51,10 +56,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDto registrationUserDto) {
         if (!registrationUserDto.getPassword().equals(registrationUserDto.getConfirmPassword())) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пароли не совпали"), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), PASSWORDS_DID_NOT_MATCH), HttpStatus.UNAUTHORIZED);
         }
         if (userRepository.findByEmail(registrationUserDto.getEmail()).isPresent()) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с указанным email уже существует"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST), HttpStatus.BAD_REQUEST);
         }
 //        if(!EmailValidation.isValidEmailAddress(registartionUserDto.getEmail())) {
 //            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Неверно введенная почта"), HttpStatus.BAD_REQUEST);

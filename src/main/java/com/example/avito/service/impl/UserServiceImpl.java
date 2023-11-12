@@ -33,6 +33,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final static String USER_NOT_FOUND_MSG = "user with email %s not found";
+    private final static String USER_WHIT_THIS_EMAIL_EXIST = "user with email %s not found";
 
     private final UserRepository userRepository;
     private final RoleService roleService;
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> updateUser = userRepository.findByEmail(email);
         if (updateUser.isPresent()) {
             if (userRepository.findByEmail(updateUserDto.getEmail()).isPresent()) {
-                return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с указанным email уже существует"), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST), HttpStatus.BAD_REQUEST);
             }
 
             User user = updateUser.get();

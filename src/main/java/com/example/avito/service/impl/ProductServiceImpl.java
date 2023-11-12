@@ -27,6 +27,10 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
+    private final static String USER_NOT_FOUND = "Пользователь не найден";
+    private final static String PRODUCT_ADDED_SUCCESSFULLY = "Продукт успешно добавлен";
+    private final static String PRODUCT_NOT_ADDED = "Продукт не добавлен";
+
     ProductRepository productRepository;
     UserRepository userRepository;
 
@@ -43,9 +47,9 @@ public class ProductServiceImpl implements ProductService {
             product.setDateCreation(new Date());
             product.setDescription(productDto.getDescription());
             productRepository.save(product);
-            return ResponseEntity.ok().body("продукт успешно добавлен");
+            return ResponseEntity.ok().body(PRODUCT_ADDED_SUCCESSFULLY);
         } else {
-            throw new RuntimeException("Продукт не добавлен");
+            throw new RuntimeException(PRODUCT_NOT_ADDED);
         }
     }
 
@@ -72,7 +76,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<MyProductDto> getMyProducts(@AuthenticationPrincipal String email) {
         Optional<User> user = userRepository.findByEmail(email);
-        User currentUser = user.orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+        User currentUser = user.orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
         List<Product> products = productRepository.findAllByIdCreator(currentUser);
 
         return getMyProductDtos(products);
