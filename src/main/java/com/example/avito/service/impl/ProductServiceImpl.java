@@ -45,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
             productRepository.save(product);
             return ResponseEntity.ok().body("продукт успешно добавлен");
         } else {
-            throw new RuntimeException("User not found");
+            throw new RuntimeException("Продукт не добавлен");
         }
     }
 
@@ -57,15 +57,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProductById(@AuthenticationPrincipal String email, Long id) {
         Optional<Product> product = productRepository.findById(id);
-
         Optional<User> user = userRepository.findByEmail(email);
 
-        if(product.isPresent()) {
-            if (Objects.equals(product.get().getIdCreator(), user.get().getId())) {
+        if (product.isPresent() && user.isPresent()) {
+            if (product.get().getIdCreator().getId().equals(user.get().getId())) {
                 productRepository.deleteById(id);
                 return;
             }
-            System.out.println("у вас нет такого предмета в продаже");
+            System.out.println("У вас нет такого предмета в продаже");
         }
 
     }
