@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface ProductService{
     ResponseEntity<?> addItem(@AuthenticationPrincipal String email, @RequestBody ProductSellDto productDto);
-    List<Product> getAllProducts();
+    List<ProductShowDto> getAllProducts();
     List<ProductShowDto> sortProductsByCity();
     List<ProductShowDto> sortByPrice(@RequestBody PriceSortDto priceSortDto) throws Exception;
     ResponseEntity<?> deleteProductById(@AuthenticationPrincipal String email, Long id);

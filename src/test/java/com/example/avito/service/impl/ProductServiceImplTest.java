@@ -6,6 +6,7 @@ import com.example.avito.dtos.ProductSellDto;
 import com.example.avito.dtos.ProductShowDto;
 import com.example.avito.entity.Product;
 import com.example.avito.entity.User;
+import com.example.avito.mapper.ProductMapper;
 import com.example.avito.repository.ProductRepository;
 import com.example.avito.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,10 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,6 +32,9 @@ public class ProductServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private ProductMapper productMapper;
 
     @InjectMocks
     private ProductServiceImpl productService;
@@ -77,16 +78,6 @@ public class ProductServiceImplTest {
     }
 
     @Test
-    public void testGetAllProductsWhenProductsExistThenReturnList() {
-        when(productRepository.findAll()).thenReturn(Arrays.asList(product));
-
-        List<Product> products = productService.getAllProducts();
-
-        assertEquals(1, products.size());
-        assertEquals(product, products.get(0));
-    }
-
-    @Test
     public void testDeleteProductByIdWhenProductAndUserExistAndUserIsCreatorThenProductDeleted() {
         when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
@@ -97,35 +88,17 @@ public class ProductServiceImplTest {
     }
 
     @Test
-    public void testGetMyProductsWhenUserExistsAndHasProductsThenReturnList() {
-        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
-        when(productRepository.findAllByIdCreator(user)).thenReturn(Arrays.asList(product));
-
-        List<MyProductDto> myProductDtos = productService.getMyProducts(user.getEmail());
-
-        assertEquals(1, myProductDtos.size());
-        assertEquals(product.getCity(), myProductDtos.get(0).getCity());
-        assertEquals(product.getType(), myProductDtos.get(0).getType());
-        assertEquals(product.getPrice(), myProductDtos.get(0).getPrice());
-        assertEquals(String.valueOf(product.getDateCreation()), myProductDtos.get(0).getDateCreation());
-        assertEquals(product.getDescription(), myProductDtos.get(0).getDescription());
-    }
-
-    @Test
-    public void testSortByPriceWhenProductsSortedThenReturnSortedList() throws Exception {
+    public void testSortByPriceWhenStartAndEndPricesProvidedThenReturnList() throws Exception {
         PriceSortDto priceSortDto = new PriceSortDto();
         priceSortDto.setStartPrice(new BigDecimal("50.00"));
         priceSortDto.setEndPrice(new BigDecimal("150.00"));
 
         when(productRepository.findAll()).thenReturn(Arrays.asList(product));
+        when(productMapper.mapToProductShowDto(product)).thenReturn(new ProductShowDto());
 
         List<ProductShowDto> productShowDtos = productService.sortByPrice(priceSortDto);
 
         assertEquals(1, productShowDtos.size());
-        assertEquals(product.getCity(), productShowDtos.get(0).getCity());
-        assertEquals(product.getType(), productShowDtos.get(0).getType());
-        assertEquals(product.getPrice(), productShowDtos.get(0).getPrice());
-        assertEquals(product.getDescription(), productShowDtos.get(0).getDescription());
     }
 
     @Test

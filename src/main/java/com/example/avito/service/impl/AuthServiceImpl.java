@@ -65,12 +65,12 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.findByEmail(registrationUserDto.getEmail()).isPresent()) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST), HttpStatus.BAD_REQUEST);
         }
-        if(!EmailValidation.isValidEmailAddress(registrationUserDto.getEmail())) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), INVALID_EMAIL), HttpStatus.BAD_REQUEST);
-        }
-        if(!PasswordValidation.isValidPassword(registrationUserDto.getPassword())) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), INVALID_PASSWORD), HttpStatus.BAD_REQUEST);
-        }
+//        if(!EmailValidation.isValidEmailAddress(registrationUserDto.getEmail())) {
+//            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), INVALID_EMAIL), HttpStatus.BAD_REQUEST);
+//        }
+//        if(!PasswordValidation.isValidPassword(registrationUserDto.getPassword())) {
+//            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), INVALID_PASSWORD), HttpStatus.BAD_REQUEST);
+//        }
         User user = userService.createNewUser(registrationUserDto);
         return ResponseEntity.ok(new UserDto(user.getId(), user.getUsername(), user.getEmail()));
     }

@@ -6,6 +6,7 @@ import com.example.avito.dtos.ProductSellDto;
 import com.example.avito.dtos.ProductShowDto;
 import com.example.avito.entity.Product;
 import com.example.avito.entity.User;
+import com.example.avito.mapper.ProductMapper;
 import com.example.avito.repository.ProductRepository;
 import com.example.avito.repository.UserRepository;
 import com.example.avito.service.ProductService;
@@ -27,7 +28,6 @@ import java.util.stream.Collectors;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-
     private final static String USER_NOT_FOUND = "Пользователь не найден";
     private final static String PRODUCT_ADDED_SUCCESSFULLY = "Продукт успешно добавлен";
     private final static String PRODUCT_DELETED_SUCCESSFULLY = "Продукт успешно удален";
@@ -37,6 +37,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private ProductMapper productMapper;
 
     @Override
     public ResponseEntity<?> addItem(@AuthenticationPrincipal String email, @RequestBody ProductSellDto productDto) {
@@ -58,15 +59,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductShowDto> getAllProducts() {
+        return productRepository.findAll().stream()
+                .map(productMapper::mapToProductShowDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<ProductShowDto> sortProductsByCity() {
         return productRepository.findAll().stream()
                 .filter(p -> p.getCity().equals("London"))
-                .map(this::convertToProductShowDto)
+                .map(productMapper::mapToProductShowDto)
                 .collect(Collectors.toList());
     }
 
@@ -77,18 +80,8 @@ public class ProductServiceImpl implements ProductService {
         }
         return productRepository.findAll().stream()
                 .filter(p -> p.getPrice().compareTo(priceSortDto.getStartPrice()) >= 0 && p.getPrice().compareTo(priceSortDto.getEndPrice()) <= 0)
-                .map(this::convertToProductShowDto)
+                .map(productMapper::mapToProductShowDto)
                 .collect(Collectors.toList());
-    }
-
-    private ProductShowDto convertToProductShowDto(Product product) {
-        ProductShowDto productShowDto = new ProductShowDto();
-        productShowDto.setCity(product.getCity());
-        productShowDto.setCity(product.getCity());
-        productShowDto.setPrice(product.getPrice());
-        productShowDto.setType(product.getType());
-        productShowDto.setDescription(product.getDescription());
-        return productShowDto;
     }
 
     @Override
@@ -113,21 +106,6 @@ public class ProductServiceImpl implements ProductService {
         User currentUser = user.orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
         List<Product> products = productRepository.findAllByIdCreator(currentUser);
 
-        return getMyProductDtos(products);
-    }
-
-    private static List<MyProductDto> getMyProductDtos(List<Product> products) {
-        List<MyProductDto> MyProductDto = new ArrayList<>();
-        for (Product product : products) {
-            MyProductDto myProductDto = new MyProductDto();
-            myProductDto.setCity(product.getCity());
-            myProductDto.setType(product.getType());
-            myProductDto.setPrice(product.getPrice());
-            myProductDto.setDateCreation(String.valueOf(product.getDateCreation()));
-            myProductDto.setDescription(product.getDescription());
-
-            MyProductDto.add(myProductDto);
-        }
-        return MyProductDto;
+        return productMapper.mapToMyProductDtos(products);
     }
 }

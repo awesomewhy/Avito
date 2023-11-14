@@ -2,6 +2,7 @@ package com.example.avito.controllers;
 
 import com.example.avito.dtos.MyProductDto;
 import com.example.avito.dtos.ProductSellDto;
+import com.example.avito.dtos.ProductShowDto;
 import com.example.avito.entity.Product;
 import com.example.avito.service.AdminService;
 import com.example.avito.service.ProductService;
@@ -28,9 +29,11 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public String getProducts() {
-        List<Product> products = productService.getAllProducts();
-        return adminService.convertObjectsToJson(products);
+    public List<ProductShowDto> getProducts() {
+//        List<ProductShowDto> products = productService.getAllProducts();
+//        return adminService.convertObjectsToJson(products);
+
+        return productService.getAllProducts();
     }
 
     @PostMapping("/additem")
