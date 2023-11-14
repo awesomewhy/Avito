@@ -4,6 +4,8 @@ Java 17
 
 REST API
 
+JWT
+
 Хранение фотографий в Amazon S3
 
 Spring Boot
@@ -15,8 +17,6 @@ Spring Sequrity
 Spring Data Jpa
 
 Hibernate
-
-JWT
 
 Thymeleaf
 
