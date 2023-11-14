@@ -4,6 +4,8 @@ Java 17
 
 REST API
 
+JWT
+
 Spring Boot
 
 Spring Data
@@ -14,20 +16,16 @@ Spring Data Jpa
 
 Hibernate
 
-JWT
-
-Thymeleaf
-
-Lombok
-
 Docker
 
 JUnit
 
 Postgres
 
-Maven
-
 Git
+
+Lombok
+
+Maven
 
 Микросервис
