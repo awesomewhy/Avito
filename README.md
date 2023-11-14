@@ -6,8 +6,6 @@ REST API
 
 JWT
 
-Хранение фотографий в Amazon S3
-
 Spring Boot
 
 Spring Data
@@ -18,18 +16,16 @@ Spring Data Jpa
 
 Hibernate
 
-Thymeleaf
-
-Lombok
-
 Docker
 
 JUnit
 
 Postgres
 
-Maven
-
 Git
+
+Lombok
+
+Maven
 
 Микросервис
