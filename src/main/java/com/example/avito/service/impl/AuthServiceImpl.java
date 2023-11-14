@@ -7,6 +7,8 @@ import com.example.avito.repository.UserRepository;
 import com.example.avito.service.AuthService;
 import com.example.avito.service.UserService;
 import com.example.avito.utils.JwtTokenUtils;
+import com.example.avito.validation.EmailValidation;
+import com.example.avito.validation.PasswordValidation;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,8 @@ public class AuthServiceImpl implements AuthService {
     private final static String USER_WHIT_THIS_EMAIL_EXIST = "user with email %s not found";
     private final static String PASSWORDS_DID_NOT_MATCH = "пароли не совпали";
     private final static String INCORRECT_LOGIN_OR_PASSWORD = "неправильный логин или пароль";
+    private final static String INVALID_EMAIL = "Неверно введенная почта";
+    private final static String INVALID_PASSWORD = "Пароль введет с недопустимыми символами или пароль скишком маленький";
 
 
     private final UserService userService;
@@ -61,12 +65,12 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.findByEmail(registrationUserDto.getEmail()).isPresent()) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST), HttpStatus.BAD_REQUEST);
         }
-//        if(!EmailValidation.isValidEmailAddress(registartionUserDto.getEmail())) {
-//            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Неверно введенная почта"), HttpStatus.BAD_REQUEST);
-//        }
-//        if(!PasswordValidation.isValidPassword(registartionUserDto.getPassword())) {
-//            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пароль введет с недопустимыми символами или пароль скишком маленький"), HttpStatus.BAD_REQUEST);
-//        }
+        if(!EmailValidation.isValidEmailAddress(registrationUserDto.getEmail())) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), INVALID_EMAIL), HttpStatus.BAD_REQUEST);
+        }
+        if(!PasswordValidation.isValidPassword(registrationUserDto.getPassword())) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), INVALID_PASSWORD), HttpStatus.BAD_REQUEST);
+        }
         User user = userService.createNewUser(registrationUserDto);
         return ResponseEntity.ok(new UserDto(user.getId(), user.getUsername(), user.getEmail()));
     }
