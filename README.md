@@ -4,6 +4,8 @@ Java 17
 
 REST API
 
+Хранение фотографий в Amazon S3
+
 Spring Boot
 
 Spring Data
