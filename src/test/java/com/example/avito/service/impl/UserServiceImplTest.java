@@ -73,7 +73,7 @@ class UserServiceImplTest {
         ResponseEntity<?> response = userService.updateUser("test@test.com", updateUserDto);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Пользователь не найден", response.getBody());
+        assertEquals("user not found", response.getBody());
     }
 
     @Test
@@ -184,6 +184,6 @@ class UserServiceImplTest {
         ResponseEntity<?> response = userService.deleteProfile("test@test.com", deleteProfileDto);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Неверный пароль или профиль не найден", response.getBody());
+        assertEquals("неверно введен пароль", response.getBody());
     }
 }

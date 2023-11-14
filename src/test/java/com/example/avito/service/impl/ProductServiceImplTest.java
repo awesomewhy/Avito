@@ -1,7 +1,9 @@
 package com.example.avito.service.impl;
 
 import com.example.avito.dtos.MyProductDto;
+import com.example.avito.dtos.PriceSortDto;
 import com.example.avito.dtos.ProductSellDto;
+import com.example.avito.dtos.ProductShowDto;
 import com.example.avito.entity.Product;
 import com.example.avito.entity.User;
 import com.example.avito.repository.ProductRepository;
@@ -21,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,7 +73,7 @@ public class ProductServiceImplTest {
         ResponseEntity<?> response = productService.addItem(user.getEmail(), productDto);
 
         verify(productRepository, times(1)).save(any(Product.class));
-        assertEquals("продукт успешно добавлен", response.getBody());
+        assertEquals("Продукт успешно добавлен", response.getBody());
     }
 
     @Test
@@ -106,5 +109,31 @@ public class ProductServiceImplTest {
         assertEquals(product.getPrice(), myProductDtos.get(0).getPrice());
         assertEquals(String.valueOf(product.getDateCreation()), myProductDtos.get(0).getDateCreation());
         assertEquals(product.getDescription(), myProductDtos.get(0).getDescription());
+    }
+
+    @Test
+    public void testSortByPriceWhenProductsSortedThenReturnSortedList() throws Exception {
+        PriceSortDto priceSortDto = new PriceSortDto();
+        priceSortDto.setStartPrice(new BigDecimal("50.00"));
+        priceSortDto.setEndPrice(new BigDecimal("150.00"));
+
+        when(productRepository.findAll()).thenReturn(Arrays.asList(product));
+
+        List<ProductShowDto> productShowDtos = productService.sortByPrice(priceSortDto);
+
+        assertEquals(1, productShowDtos.size());
+        assertEquals(product.getCity(), productShowDtos.get(0).getCity());
+        assertEquals(product.getType(), productShowDtos.get(0).getType());
+        assertEquals(product.getPrice(), productShowDtos.get(0).getPrice());
+        assertEquals(product.getDescription(), productShowDtos.get(0).getDescription());
+    }
+
+    @Test
+    public void testSortByPriceWhenStartAndEndPricesNotProvidedThenThrowException() {
+        PriceSortDto priceSortDto = new PriceSortDto();
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> productService.sortByPrice(priceSortDto));
+
+        assertEquals("Необходимо указать начальную и конечную цену", exception.getMessage());
     }
 }
