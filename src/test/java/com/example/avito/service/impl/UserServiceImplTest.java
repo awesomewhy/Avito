@@ -1,9 +1,11 @@
 package com.example.avito.service.impl;
 
-import com.example.avito.dtos.*;
+import com.example.avito.dtos.ChangePasswordDto;
+import com.example.avito.dtos.DeleteProfileDto;
+import com.example.avito.dtos.MyProfileDto;
+import com.example.avito.dtos.UpdateUserDto;
 import com.example.avito.entity.Role;
 import com.example.avito.entity.User;
-import com.example.avito.exceptions.AppError;
 import com.example.avito.repository.UserRepository;
 import com.example.avito.service.RoleService;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import com.example.avito.dtos.UpdateUserDto;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -159,9 +160,8 @@ class UserServiceImplTest {
     @Test
     @DisplayName("testDeleteProfileWhenPasswordIsCorrectThenReturnOk")
     void testDeleteProfileWhenPasswordIsCorrectThenReturnOk() {
-        DeleteProfileDto deleteProfileDto = DeleteProfileDto.builder()
-                .password("password")
-                .build();
+        DeleteProfileDto deleteProfileDto = new DeleteProfileDto();
+        deleteProfileDto.setPassword("password");
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
         doNothing().when(userRepository).delete(any(User.class));
@@ -175,9 +175,8 @@ class UserServiceImplTest {
     @Test
     @DisplayName("testDeleteProfileWhenPasswordIsIncorrectThenReturnBadRequest")
     void testDeleteProfileWhenPasswordIsIncorrectThenReturnBadRequest() {
-        DeleteProfileDto deleteProfileDto = DeleteProfileDto.builder()
-                .password("incorrectPassword")
-                .build();
+        DeleteProfileDto deleteProfileDto = new DeleteProfileDto();
+        deleteProfileDto.setPassword("incorrectPassword");
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
