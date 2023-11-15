@@ -39,7 +39,7 @@
   {"id":39,"first_name":"Dagmar","last_name":"Rollo","email":"drollo12@reuters.com","gender":"Female","ip_address":"118.112.219.161"},
   {"id":40,"first_name":"Tamiko","last_name":"Madgewick","email":"tmadgewick13@sina.com.cn","gender":"Female","ip_address":"124.44.105.209"},
   {"id":41,"first_name":"Emiline","last_name":"Nimmo","email":"enimmo14@narod.ru","gender":"Female","ip_address":"200.238.239.99"},
-  {"id":42,"first_name":"Goraud","last_name":"Bowick","email":"gbowick15@elegantthemes.com","gender":"Male","ip_address":"90.21.163.38"},
+  {"id":42,"first_name":"Goraud","username":"Bowick","email":"gbowick15@elegantthemes.com","gender":"Male","ip_address":"90.21.163.38"},
   {"id":43,"first_name":"Leanora","last_name":"Lias","email":"llias16@soup.io","gender":"Female","ip_address":"18.123.154.126"},
   {"id":44,"first_name":"Fairleigh","last_name":"Snowman","email":"fsnowman17@reverbnation.com","gender":"Male","ip_address":"18.69.164.4"},
   {"id":45,"first_name":"Walton","last_name":"Ferrarin","email":"wferrarin18@ucla.edu","gender":"Male","ip_address":"129.37.88.147"},

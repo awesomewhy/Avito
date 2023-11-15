@@ -19,7 +19,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
-    private ProductMapper productMapper;
+    private final ProductMapper productMapper;
 
     @Override
     public ResponseEntity<?> addItem(@AuthenticationPrincipal String email, @RequestBody ProductSellDto productDto) {
@@ -54,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
             productRepository.save(product);
             return ResponseEntity.ok().body(PRODUCT_ADDED_SUCCESSFULLY);
         } else {
-            throw new RuntimeException(PRODUCT_NOT_ADDED);
+            return ResponseEntity.badRequest().body(PRODUCT_NOT_ADDED);
         }
     }
 
@@ -74,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductShowDto> sortByPrice(PriceSortDto priceSortDto) throws Exception {
+    public List<ProductShowDto> sortByPrice(PriceSortDto priceSortDto) {
         if (priceSortDto.getStartPrice() == null || priceSortDto.getEndPrice() == null) {
             throw new IllegalArgumentException(START_PRICE_AND_END_PRICE_MUST_BE_PROVIDED);
         }
