@@ -86,7 +86,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_BY_EMAIL, email)
@@ -130,7 +129,6 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.badRequest().body(OLD_PASSWORD_NOT_MATCH);
         }
     }
-
     @Override
     @Transactional
     public ResponseEntity<?> deleteProfile(@AuthenticationPrincipal String email, @RequestBody DeleteProfileDto deleteProfileDto) {

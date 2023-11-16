@@ -20,6 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.security.Security;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -45,14 +46,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                    email,
-                    null,
-                    jwtTokenUtils.getRoles(jwt).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
-            );
+            UsernamePasswordAuthenticationToken token = createAuthenticationToken(email, jwt);
             SecurityContextHolder.getContext().setAuthentication(token);
         }
         filterChain.doFilter(request, response);
+    }
+    private UsernamePasswordAuthenticationToken createAuthenticationToken(String email, String jwt) {
+        List<SimpleGrantedAuthority> authorities = jwtTokenUtils.getRoles(jwt)
+                .stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+
+        return new UsernamePasswordAuthenticationToken(email, null, authorities);
     }
 
 }
