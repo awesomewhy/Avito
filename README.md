@@ -29,3 +29,5 @@ Lombok
 Maven
 
 Микросервис
+
+Реализован чат на WebSocket
