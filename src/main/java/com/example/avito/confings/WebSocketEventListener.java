@@ -1,7 +1,6 @@
 package com.example.avito.confings;
 
-
-import com.example.avito.dtos.ChatMessage;
+import com.example.avito.dtos.ChatMessageDto;
 import com.example.avito.enums.MessageType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,7 @@ public class WebSocketEventListener {
         String username = (String) headerAccessor.getSessionAttributes().get("username");
         if (username != null) {
             log.info("user disconnected: {}", username);
-            var chatMessage = ChatMessage.builder()
+            var chatMessage = ChatMessageDto.builder()
                     .type(MessageType.LEAVE)
                     .sender(username)
                     .build();

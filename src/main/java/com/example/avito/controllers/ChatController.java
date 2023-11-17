@@ -1,6 +1,6 @@
 package com.example.avito.controllers;
 
-import com.example.avito.dtos.ChatMessage;
+import com.example.avito.dtos.ChatMessageDto;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -14,13 +14,13 @@ public class ChatController {
 
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
-    public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
+    public ChatMessageDto sendMessage(@Payload ChatMessageDto chatMessage) {
         return chatMessage;
     }
 
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/public")
-    public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
+    public ChatMessageDto addUser(@Payload ChatMessageDto chatMessage, SimpMessageHeaderAccessor headerAccessor) {
         Objects.requireNonNull(headerAccessor.getSessionAttributes()).put("username", chatMessage.getSender());
         return chatMessage;
     }

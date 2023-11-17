@@ -15,6 +15,9 @@ import jakarta.websocket.OnMessage;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
@@ -74,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductShowDto> sortByPrice(PriceSortDto priceSortDto) {
+    public List<ProductShowDto> sortByPrice(@RequestBody PriceSortDto priceSortDto) {
         if (priceSortDto.getStartPrice() == null || priceSortDto.getEndPrice() == null) {
             throw new IllegalArgumentException(START_PRICE_AND_END_PRICE_MUST_BE_PROVIDED);
         }
@@ -85,6 +88,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(value = "product", key = "#id")
     public ResponseEntity<?> deleteProductById(@AuthenticationPrincipal String email, Long id) {
         Optional<Product> product = productRepository.findById(id);
         Optional<User> user = userRepository.findByEmail(email);

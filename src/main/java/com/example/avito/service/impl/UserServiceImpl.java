@@ -12,20 +12,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import java.util.Optional;
+import java.util.concurrent.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -50,22 +48,33 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public ResponseEntity<?> updateUser(@AuthenticationPrincipal String email, @RequestBody UpdateUserDto updateUserDto) {
-        Optional<User> updateUser = userRepository.findByEmail(email);
-        if (updateUser.isPresent()) {
-            if (userRepository.findByEmail(updateUserDto.getEmail()).isPresent()) {
-                return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST), HttpStatus.BAD_REQUEST);
+        CompletableFuture<ResponseEntity<?>> future = CompletableFuture.supplyAsync(() -> {
+            Optional<User> updateUser = userRepository.findByEmail(email);
+            if (updateUser.isPresent()) {
+                if (userRepository.findByEmail(updateUserDto.getEmail()).isPresent()) {
+                    return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST), HttpStatus.BAD_REQUEST);
+                }
+
+                User user = updateUser.get();
+                user.setUsername(updateUserDto.getUsername());
+                user.setNickname(updateUserDto.getNickname());
+                user.setEmail(updateUserDto.getEmail());
+                user.setCity(updateUserDto.getCity());
+                userRepository.save(user);
+
+                return ResponseEntity.ok().body(USER_SAVED);
+            } else {
+                return ResponseEntity.badRequest().body(USER_NOT_FOUND);
             }
+        });
 
-            User user = updateUser.get();
-            user.setUsername(updateUserDto.getUsername());
-            user.setNickname(updateUserDto.getNickname());
-            user.setEmail(updateUserDto.getEmail());
-            user.setCity(updateUserDto.getCity());
-            userRepository.save(user);
-
-            return ResponseEntity.ok().body(USER_SAVED);
-        } else {
-            return ResponseEntity.badRequest().body(USER_NOT_FOUND);
+        try {
+            return future.get(5, TimeUnit.SECONDS);
+        } catch (TimeoutException e) {
+            future.cancel(true);
+            return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body("Запрос слишком долгий");
+        } catch (InterruptedException | ExecutionException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ошибка сервера");
         }
     }
 
