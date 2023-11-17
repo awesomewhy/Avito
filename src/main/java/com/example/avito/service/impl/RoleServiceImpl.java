@@ -25,6 +25,7 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findByName(ROLE_USER)
                 .orElseThrow(() -> new RuntimeException("User role not found"));
     }
+
     @Override
     public Role getAdminRole() {
         return roleRepository.findByName(ROLE_ADMIN)

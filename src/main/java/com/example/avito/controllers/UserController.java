@@ -28,7 +28,7 @@ public class UserController {
     }
 
     @GetMapping("/sortbyprice")
-    public List<ProductShowDto> sortByPrice(@RequestBody PriceSortDto priceSortDto) throws Exception{
+    public List<ProductShowDto> sortByPrice(@RequestBody PriceSortDto priceSortDto) throws Exception {
         return productService.sortByPrice(priceSortDto);
     }
 
@@ -51,6 +51,7 @@ public class UserController {
     public ResponseEntity<?> changePassword(@AuthenticationPrincipal String email, @RequestBody ChangePasswordDto changePasswordDto) {
         return userService.changePassword(email, changePasswordDto);
     }
+
     @PostMapping("/deleteprofile")
     public ResponseEntity<?> deleteProfile(@AuthenticationPrincipal String email, @RequestBody DeleteProfileDto deleteProfileDto) {
         return userService.deleteProfile(email, deleteProfileDto);

@@ -20,6 +20,7 @@ public class ProductController {
 
     private final ProductService productService;
     private final AdminService adminService;
+
     @GetMapping("/myproducts")
     public List<MyProductDto> getMyProducts(@AuthenticationPrincipal String email) {
 //        List<Product> products = productService.getMyProducts();

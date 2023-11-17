@@ -15,14 +15,21 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
     private final AdminService adminService;
+
     @GetMapping("/users")
     public String getAllUsers() {
         List<User> users = adminService.getAllUsers();
         return adminService.convertObjectsToJson(users);
     }
+
     @PostMapping("/setadminrole/{id}")
     public ResponseEntity<?> setAdminRole(@PathVariable Long id) {
         return adminService.setAdminRole(id);
+    }
+
+    @PostMapping("/setuserrole/{id}")
+    public ResponseEntity<?> setUserRole(@PathVariable Long id) {
+        return adminService.setUserRole(id);
     }
 
     @GetMapping("/admin")
