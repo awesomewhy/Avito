@@ -100,12 +100,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User createNewUser(@RequestBody RegistrationUserDto registrationUserDto) {
-        User user = new User();
-        user.setUsername(registrationUserDto.getUsername());
-        user.setEmail(registrationUserDto.getEmail());
-        user.setPassword(passwordEncoder.encode(registrationUserDto.getPassword()));
-        user.setCity(registrationUserDto.getCity());
-        user.setRoles(List.of(roleService.getUserRole()));
+        User user = User.builder()
+                .username(registrationUserDto.getUsername())
+                    .email(registrationUserDto.getEmail())
+                        .password(passwordEncoder.encode(registrationUserDto.getPassword()))
+                            .city(registrationUserDto.getCity())
+                                .roles(List.of(roleService.getUserRole())).build();
         return userRepository.save(user);
     }
 

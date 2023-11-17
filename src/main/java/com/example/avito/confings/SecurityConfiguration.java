@@ -32,15 +32,15 @@ public class SecurityConfiguration {
     private final JwtRequestFilter jwtRequestFilter;
     private final PasswordEncoderConfiguration passwordEncoderConfiguration;
 
-    private static final String SECURED = "/secured";
-    private static final String INFO = "/info";
-    private static final String LOGIN = "/login";
-    private static final String ADD_ITEM = "/additem";
+    private static final String SECURED = "/admin/secured";
+    private static final String INFO = "/user/info";
+    private static final String LOGIN = "/user/login";
+    private static final String ADD_ITEM = "/user/additem";
     private static final String SORT_BY_CITY = "/sortbycity";
-    private static final String GET_ME = "/getme";
-    private static final String UPDATE = "/update";
-    private static final String ADMIN = "/admin";
-    private static final String USERS = "/users";
+    private static final String GET_ME = "/user/getme";
+    private static final String UPDATE = "/user/update";
+    private static final String ADMIN = "/admin/admin";
+    private static final String USERS = "/admin/users";
 
     private void sharedSecurityConfiguration(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -56,7 +56,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChainUsersAPI(HttpSecurity httpSecurity) throws Exception {
         sharedSecurityConfiguration(httpSecurity);
         httpSecurity
-                .securityMatcher(SECURED, INFO, LOGIN, ADD_ITEM ,SORT_BY_CITY, GET_ME, UPDATE)
+                .securityMatcher(SECURED, INFO, LOGIN, ADD_ITEM, GET_ME, UPDATE)
                 .authorizeHttpRequests(auth -> {
                     auth.anyRequest().authenticated();
                 })

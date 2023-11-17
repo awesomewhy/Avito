@@ -4,10 +4,8 @@ import com.example.avito.entity.User;
 import com.example.avito.service.AdminService;
 import com.example.avito.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -21,6 +19,10 @@ public class AdminController {
     public String getAllUsers() {
         List<User> users = adminService.getAllUsers();
         return adminService.convertObjectsToJson(users);
+    }
+    @PostMapping("/setadminrole/{id}")
+    public ResponseEntity<?> setAdminRole(@PathVariable Long id) {
+        return adminService.setAdminRole(id);
     }
 
     @GetMapping("/admin")
