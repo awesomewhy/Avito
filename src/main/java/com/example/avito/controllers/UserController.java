@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.http.WebSocket;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +19,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
-
     private final UserService userService;
     private final ProductService productService;
 
