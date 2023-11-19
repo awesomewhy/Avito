@@ -1,5 +1,7 @@
-package com.example.avito.confing;
+package com.example.avito.config.security;
 
+import com.example.avito.config.JwtRequestFilter;
+import com.example.avito.config.security.PasswordEncoderConfiguration;
 import com.example.avito.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

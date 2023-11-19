@@ -1,4 +1,4 @@
-package com.example.avito.confing;
+package com.example.avito.config.websocket;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

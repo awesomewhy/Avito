@@ -1,4 +1,4 @@
-package com.example.avito.confing;
+package com.example.avito.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

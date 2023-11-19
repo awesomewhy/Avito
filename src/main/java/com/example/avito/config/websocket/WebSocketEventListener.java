@@ -1,4 +1,4 @@
-package com.example.avito.confing;
+package com.example.avito.config.websocket;
 
 import com.example.avito.dto.ChatMessageDto;
 import com.example.avito.enums.MessageType;

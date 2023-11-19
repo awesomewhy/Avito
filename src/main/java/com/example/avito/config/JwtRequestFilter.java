@@ -1,4 +1,4 @@
-package com.example.avito.confing;
+package com.example.avito.config;
 
 import com.example.avito.util.JwtTokenUtils;
 import io.jsonwebtoken.ExpiredJwtException;
