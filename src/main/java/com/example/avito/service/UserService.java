@@ -1,13 +1,12 @@
 package com.example.avito.service;
 
-import com.example.avito.dtos.*;
+import com.example.avito.dto.*;
 import com.example.avito.entity.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserService extends UserDetailsService {

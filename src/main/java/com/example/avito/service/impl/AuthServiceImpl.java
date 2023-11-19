@@ -1,14 +1,12 @@
 package com.example.avito.service.impl;
 
-import com.example.avito.dtos.*;
+import com.example.avito.dto.*;
 import com.example.avito.entity.User;
-import com.example.avito.exceptions.AppError;
+import com.example.avito.exception.AppError;
 import com.example.avito.repository.UserRepository;
 import com.example.avito.service.AuthService;
 import com.example.avito.service.UserService;
-import com.example.avito.utils.JwtTokenUtils;
-import com.example.avito.validation.EmailValidation;
-import com.example.avito.validation.PasswordValidation;
+import com.example.avito.util.JwtTokenUtils;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

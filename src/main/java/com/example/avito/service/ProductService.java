@@ -1,10 +1,9 @@
 package com.example.avito.service;
 
-import com.example.avito.dtos.MyProductDto;
-import com.example.avito.dtos.PriceSortDto;
-import com.example.avito.dtos.ProductSellDto;
-import com.example.avito.dtos.ProductShowDto;
-import com.example.avito.entity.Product;
+import com.example.avito.dto.MyProductDto;
+import com.example.avito.dto.PriceSortDto;
+import com.example.avito.dto.ProductSellDto;
+import com.example.avito.dto.ProductShowDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,9 +1,9 @@
 package com.example.avito.service.impl;
 
-import com.example.avito.dtos.ChangePasswordDto;
-import com.example.avito.dtos.DeleteProfileDto;
-import com.example.avito.dtos.MyProfileDto;
-import com.example.avito.dtos.UpdateUserDto;
+import com.example.avito.dto.ChangePasswordDto;
+import com.example.avito.dto.DeleteProfileDto;
+import com.example.avito.dto.MyProfileDto;
+import com.example.avito.dto.UpdateUserDto;
 import com.example.avito.entity.Role;
 import com.example.avito.entity.User;
 import com.example.avito.repository.UserRepository;

@@ -1,9 +1,9 @@
 package com.example.avito.service.impl;
 
-import com.example.avito.dtos.MyProductDto;
-import com.example.avito.dtos.PriceSortDto;
-import com.example.avito.dtos.ProductSellDto;
-import com.example.avito.dtos.ProductShowDto;
+import com.example.avito.dto.MyProductDto;
+import com.example.avito.dto.PriceSortDto;
+import com.example.avito.dto.ProductSellDto;
+import com.example.avito.dto.ProductShowDto;
 import com.example.avito.entity.Product;
 import com.example.avito.entity.User;
 import com.example.avito.mapper.ProductMapper;
@@ -11,13 +11,10 @@ import com.example.avito.repository.ProductRepository;
 import com.example.avito.repository.UserRepository;
 import com.example.avito.service.ProductService;
 import jakarta.transaction.Transactional;
-import jakarta.websocket.OnMessage;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;

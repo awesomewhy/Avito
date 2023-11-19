@@ -1,9 +1,8 @@
 package com.example.avito.service.impl;
 
-import com.example.avito.dtos.MyProductDto;
-import com.example.avito.dtos.PriceSortDto;
-import com.example.avito.dtos.ProductSellDto;
-import com.example.avito.dtos.ProductShowDto;
+import com.example.avito.dto.PriceSortDto;
+import com.example.avito.dto.ProductSellDto;
+import com.example.avito.dto.ProductShowDto;
 import com.example.avito.entity.Product;
 import com.example.avito.entity.User;
 import com.example.avito.mapper.ProductMapper;

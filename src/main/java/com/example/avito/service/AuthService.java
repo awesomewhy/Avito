@@ -1,8 +1,8 @@
 package com.example.avito.service;
 
-import com.example.avito.dtos.JwtRequestDto;
-import com.example.avito.dtos.RegistrationUserDto;
-import com.example.avito.dtos.RegisterRequestDto;
+import com.example.avito.dto.JwtRequestDto;
+import com.example.avito.dto.RegistrationUserDto;
+import com.example.avito.dto.RegisterRequestDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
