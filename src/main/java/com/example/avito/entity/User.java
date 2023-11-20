@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.Email;
 import java.util.Collection;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -16,9 +17,9 @@ import java.util.Collection;
 @Builder
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "UUID")
+    private UUID id;
 
     @Column(name = "username")
     private String username;
@@ -42,4 +43,5 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Collection<Role> roles;
+
 }

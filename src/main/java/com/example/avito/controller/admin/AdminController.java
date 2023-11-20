@@ -15,9 +15,8 @@ public class AdminController {
     private final AdminService adminService;
 
     @GetMapping("/users")
-    public String getAllUsers() {
-        List<User> users = adminService.getAllUsers();
-        return adminService.convertObjectsToJson(users);
+    public List<User> getAllUsers() {
+        return adminService.getAllUsers();
     }
 
     @PostMapping("/adminrole/{id}")
