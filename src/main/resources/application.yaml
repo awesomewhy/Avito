@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/avito
     username: postgres
-    password: qwe
+    password: postgres
     driver-class-name: org.postgresql.Driver
 
   jpa:

@@ -33,12 +33,12 @@ public class SecurityConfiguration {
     private static final String ADD_ITEM = "/user/additem";
     private static final String SORT_BY_CITY = "/sortbycity";
     private static final String SORT_BY_PRICE = "/sortbyprice";
-    private static final String GET_ME = "/user/getme";
+    private static final String GET_ME = "/user/im";
     private static final String UPDATE = "/user/update";
     private static final String ADMIN = "/admin/admin";
     private static final String USERS = "/admin/users";
-    private static final String SET_USER_ROLE = "/setuserrole/{id}";
-    private static final String SET_ADMIN_ROLE = "/setadminrole/{id}";
+    private static final String SET_USER_ROLE = "/userrole/{id}";
+    private static final String SET_ADMIN_ROLE = "/adminrole/{id}";
 
     private void sharedSecurityConfiguration(HttpSecurity httpSecurity) throws Exception {
         httpSecurity

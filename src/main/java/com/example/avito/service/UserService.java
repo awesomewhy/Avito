@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface UserService extends UserDetailsService {
     User createNewUser(@RequestBody RegistrationUserDto registrationUserDto);
     ResponseEntity<?> updateUser(@AuthenticationPrincipal String email, @RequestBody UpdateUserDto updateUserDto);
-    Optional<MyProfileDto> getMyProfile(@AuthenticationPrincipal String email);
+    ResponseEntity<?> getMyProfile(@AuthenticationPrincipal String email);
     ResponseEntity<?> changePassword(@AuthenticationPrincipal String email, @RequestBody ChangePasswordDto changePasswordDto);
     ResponseEntity<?> deleteProfile(@AuthenticationPrincipal String email, @RequestBody DeleteProfileDto deleteProfileDto);
 }

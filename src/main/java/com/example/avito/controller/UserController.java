@@ -8,9 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -19,8 +17,8 @@ public class UserController {
     private final UserService userService;
     private final ProductService productService;
 
-    @GetMapping("/im")
-    public Optional<MyProfileDto> getMyProfile(@AuthenticationPrincipal String email) {
+    @GetMapping("/profile")
+    public ResponseEntity<?> getMyProfile(@AuthenticationPrincipal String email) {
         return userService.getMyProfile(email);
     }
 

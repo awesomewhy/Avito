@@ -14,7 +14,6 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/products")
 public class ProductController {
 
     private final ProductService productService;
@@ -28,8 +27,8 @@ public class ProductController {
         return productService.getMyProducts(email);
     }
 
-    @GetMapping()
-    public List<ProductShowDto> getProducts() {
+    @GetMapping("/")
+    public List<ProductShowDto> getAllProducts() {
 //        List<ProductShowDto> products = productService.getAllProducts();
 //        return adminService.convertObjectsToJson(products);
 
@@ -41,8 +40,8 @@ public class ProductController {
         return productService.addItem(email, productDto);
     }
 
-    @PostMapping("/delete/{id}")
-    public ResponseEntity<?> deleteProduct(@AuthenticationPrincipal String email, @PathVariable Long id) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteProductById(@AuthenticationPrincipal String email, @PathVariable Long id) {
         return productService.deleteProductById(email, id);
     }
 }

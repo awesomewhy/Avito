@@ -2,8 +2,9 @@ package com.example.avito.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
+
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -21,8 +22,8 @@ public class Product {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "idCreator")
-    private User idCreator;
+    @JoinColumn(name = "user_id")
+    private User creatorId;
 
     @NotNull
     @Column(name = "price")

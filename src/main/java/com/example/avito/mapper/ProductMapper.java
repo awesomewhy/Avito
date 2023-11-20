@@ -29,7 +29,6 @@ public class ProductMapper {
         ProductShowDto productShowDto = new ProductShowDto();
         productShowDto.setCity(product.getCity());
         productShowDto.setPrice(product.getPrice());
-        productShowDto.setType(product.getType());
         productShowDto.setDescription(product.getDescription());
 
         return productShowDto;

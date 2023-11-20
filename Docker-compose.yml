@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_DB: avito
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: qwe
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
 
@@ -21,4 +21,4 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres/avito
       SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: qwe
+      SPRING_DATASOURCE_PASSWORD: postgres

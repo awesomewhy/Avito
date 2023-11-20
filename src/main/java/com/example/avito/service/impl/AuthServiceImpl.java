@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Slf4j
 public class AuthServiceImpl implements AuthService {
 
-    private final static String USER_WHIT_THIS_EMAIL_EXIST = "user with email %s not found";
+    private final static String USER_WHIT_THIS_EMAIL_EXIST = "user with email уже существует";
     private final static String PASSWORDS_DID_NOT_MATCH = "пароли не совпали";
     private final static String INCORRECT_LOGIN_OR_PASSWORD = "неправильный логин или пароль";
     private final static String INVALID_EMAIL = "Неверно введенная почта";
@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), PASSWORDS_DID_NOT_MATCH), HttpStatus.UNAUTHORIZED);
         }
         if (userRepository.findByEmail(registrationUserDto.getEmail()).isPresent()) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST ), HttpStatus.BAD_REQUEST);
         }
 //        if(!EmailValidation.isValidEmailAddress(registrationUserDto.getEmail())) {
 //            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), INVALID_EMAIL), HttpStatus.BAD_REQUEST);

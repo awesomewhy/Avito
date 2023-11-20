@@ -39,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private final static String PASSWORD_CHANGED_SUCCESSFULLY = "Пароль успешно изменен";
     private final static String OLD_PASSWORD_NOT_MATCH = "Старый пароль не совпадает";
     private final static String PROFILE_DELETED_SUCCESSFULLY = "Профиль успешно удален";
+    private final static String PROFILE_NOT_DELETED = "Профиль не удален, неверный пароль";
 
     private final UserRepository userRepository;
     private final RoleService roleService;
@@ -77,9 +78,8 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ошибка сервера");
         }
     }
-
     @Override
-    public Optional<MyProfileDto> getMyProfile(@AuthenticationPrincipal String email) {
+    public ResponseEntity<?> getMyProfile(@AuthenticationPrincipal String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
@@ -88,9 +88,9 @@ public class UserServiceImpl implements UserService {
             myProfileDto.setNickname(user.getNickname());
             myProfileDto.setEmail(user.getEmail());
             myProfileDto.setCity(user.getCity());
-            return Optional.of(myProfileDto);
+            return ResponseEntity.ok(myProfileDto);
         } else {
-            return Optional.empty();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserService {
             userRepository.delete(deleteUser.get());
             return ResponseEntity.ok().body(PROFILE_DELETED_SUCCESSFULLY);
         } else {
-            return ResponseEntity.badRequest().body(BAD_PASSWORD);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(PROFILE_NOT_DELETED);
         }
     }
 }
