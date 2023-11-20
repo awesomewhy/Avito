@@ -1,6 +1,6 @@
 package com.example.avito.controller;
 
-import com.example.avito.dto.ChatMessageDto;
+import com.example.avito.dto.otherdto.ChatMessageDto;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;

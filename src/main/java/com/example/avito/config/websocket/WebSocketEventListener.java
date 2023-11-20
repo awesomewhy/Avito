@@ -1,6 +1,6 @@
 package com.example.avito.config.websocket;
 
-import com.example.avito.dto.ChatMessageDto;
+import com.example.avito.dto.otherdto.ChatMessageDto;
 import com.example.avito.enums.MessageType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

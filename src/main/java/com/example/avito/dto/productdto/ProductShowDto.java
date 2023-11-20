@@ -1,4 +1,4 @@
-package com.example.avito.dto;
+package com.example.avito.dto.productdto;
 
 import lombok.Data;
 

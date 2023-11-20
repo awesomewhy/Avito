@@ -1,4 +1,4 @@
-package com.example.avito.dto;
+package com.example.avito.dto.otherdto;
 
 import com.example.avito.enums.MessageType;
 import lombok.*;

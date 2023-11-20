@@ -1,6 +1,10 @@
 package com.example.avito.controller;
 
-import com.example.avito.dto.*;
+import com.example.avito.dto.otherdto.PriceSortDto;
+import com.example.avito.dto.productdto.ProductShowDto;
+import com.example.avito.dto.userdto.ChangePasswordDto;
+import com.example.avito.dto.userdto.DeleteProfileDto;
+import com.example.avito.dto.userdto.UpdateUserDto;
 import com.example.avito.service.ProductService;
 import com.example.avito.service.UserService;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.example.avito.controller;
 
-import com.example.avito.dto.JwtRequestDto;
-import com.example.avito.dto.RegistrationUserDto;
+import com.example.avito.dto.jwtdto.JwtRequestDto;
+import com.example.avito.dto.userdto.RegistrationUserDto;
 import com.example.avito.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

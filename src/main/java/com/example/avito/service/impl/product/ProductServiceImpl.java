@@ -1,9 +1,9 @@
-package com.example.avito.service.impl;
+package com.example.avito.service.impl.product;
 
-import com.example.avito.dto.MyProductDto;
-import com.example.avito.dto.PriceSortDto;
-import com.example.avito.dto.ProductSellDto;
-import com.example.avito.dto.ProductShowDto;
+import com.example.avito.dto.productdto.MyProductDto;
+import com.example.avito.dto.otherdto.PriceSortDto;
+import com.example.avito.dto.productdto.ProductSellDto;
+import com.example.avito.dto.productdto.ProductShowDto;
 import com.example.avito.entity.Product;
 import com.example.avito.entity.User;
 import com.example.avito.exception.ErrorResponse;
@@ -15,7 +15,6 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -59,9 +58,9 @@ public class ProductServiceImpl implements ProductService {
             product.setDateCreation(new Date());
             product.setDescription(productDto.getDescription());
             productRepository.save(product);
-            return ResponseEntity.ok().body(PRODUCT_ADDED_SUCCESSFULLY);
+            return ResponseEntity.status(HttpStatus.CREATED).body(PRODUCT_ADDED_SUCCESSFULLY);
         } else {
-            return ResponseEntity.badRequest().body(PRODUCT_NOT_ADDED);
+            return ResponseEntity.badRequest().body(new ErrorResponse(400, PRODUCT_NOT_ADDED));
         }
     }
 
@@ -92,7 +91,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @CacheEvict(value = "product", key = "#id")
     public ResponseEntity<?> deleteProductById(@AuthenticationPrincipal String email, Long id) {
         Optional<Product> product = productRepository.findById(id);
         Optional<User> user = userRepository.findByEmail(email);

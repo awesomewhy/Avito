@@ -1,8 +1,8 @@
 package com.example.avito.controller;
 
-import com.example.avito.dto.MyProductDto;
-import com.example.avito.dto.ProductSellDto;
-import com.example.avito.dto.ProductShowDto;
+import com.example.avito.dto.productdto.MyProductDto;
+import com.example.avito.dto.productdto.ProductSellDto;
+import com.example.avito.dto.productdto.ProductShowDto;
 import com.example.avito.service.AdminService;
 import com.example.avito.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class ProductController {
         return productService.addItem(email, productDto);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/profile/delete/{id}")
     public ResponseEntity<?> deleteProductById(@AuthenticationPrincipal String email, @PathVariable Long id) {
         return productService.deleteProductById(email, id);
     }

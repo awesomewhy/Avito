@@ -1,31 +1,19 @@
-package com.example.avito.service.impl;
+package com.example.avito.service.impl.admin;
 
-import com.example.avito.entity.Product;
-import com.example.avito.entity.Role;
 import com.example.avito.entity.User;
 import com.example.avito.repository.AdminRepository;
-import com.example.avito.repository.ProductRepository;
-import com.example.avito.repository.UserRepository;
 import com.example.avito.service.AdminService;
 import com.example.avito.service.RoleService;
-import com.example.avito.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

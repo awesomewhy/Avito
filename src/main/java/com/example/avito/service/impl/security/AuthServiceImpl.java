@@ -1,6 +1,10 @@
-package com.example.avito.service.impl;
+package com.example.avito.service.impl.security;
 
-import com.example.avito.dto.*;
+import com.example.avito.dto.jwtdto.JwtRequestDto;
+import com.example.avito.dto.jwtdto.JwtResponseDto;
+import com.example.avito.dto.userdto.RegisterRequestDto;
+import com.example.avito.dto.userdto.RegistrationUserDto;
+import com.example.avito.dto.userdto.UserDto;
 import com.example.avito.entity.User;
 import com.example.avito.exception.AppError;
 import com.example.avito.repository.UserRepository;
@@ -65,10 +69,10 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.findByEmail(registrationUserDto.getEmail()).isPresent()) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST ), HttpStatus.BAD_REQUEST);
         }
-//        if(!EmailValidation.isValidEmailAddress(registrationUserDto.getEmail())) {
+//        if(!Validation.isValidEmailAddress(registrationUserDto.getEmail())) {
 //            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), INVALID_EMAIL), HttpStatus.BAD_REQUEST);
 //        }
-//        if(!PasswordValidation.isValidPassword(registrationUserDto.getPassword())) {
+//        if(!Validation.isValidPassword(registrationUserDto.getPassword())) {
 //            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), INVALID_PASSWORD), HttpStatus.BAD_REQUEST);
 //        }
         User user = userService.createNewUser(registrationUserDto);

@@ -1,4 +1,4 @@
-package com.example.avito.service.impl;
+package com.example.avito.service.impl.role;
 
 import com.example.avito.entity.Role;
 import com.example.avito.repository.RoleRepository;

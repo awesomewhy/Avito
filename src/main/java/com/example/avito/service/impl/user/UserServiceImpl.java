@@ -1,6 +1,6 @@
-package com.example.avito.service.impl;
+package com.example.avito.service.impl.user;
 
-import com.example.avito.dto.*;
+import com.example.avito.dto.userdto.*;
 import com.example.avito.entity.User;
 import com.example.avito.exception.AppError;
 import com.example.avito.repository.UserRepository;
