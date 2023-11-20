@@ -2,7 +2,7 @@ package com.example.avito.service.impl.user;
 
 import com.example.avito.dto.userdto.*;
 import com.example.avito.entity.User;
-import com.example.avito.exception.AppError;
+import com.example.avito.exception.ErrorResponse;
 import com.example.avito.repository.UserRepository;
 import com.example.avito.service.RoleService;
 import com.example.avito.service.UserService;
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
             Optional<User> updateUser = userRepository.findByEmail(email);
             if (updateUser.isPresent()) {
                 if (userRepository.findByEmail(updateUserDto.getEmail()).isPresent()) {
-                    return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST), HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST), HttpStatus.BAD_REQUEST);
                 }
 
                 User user = updateUser.get();

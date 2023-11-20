@@ -1,4 +1,4 @@
-package com.example.avito.controller;
+package com.example.avito.controller.security;
 
 import com.example.avito.dto.jwtdto.JwtRequestDto;
 import com.example.avito.dto.userdto.RegistrationUserDto;

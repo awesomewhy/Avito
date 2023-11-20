@@ -6,7 +6,7 @@ import com.example.avito.dto.userdto.RegisterRequestDto;
 import com.example.avito.dto.userdto.RegistrationUserDto;
 import com.example.avito.dto.userdto.UserDto;
 import com.example.avito.entity.User;
-import com.example.avito.exception.AppError;
+import com.example.avito.exception.ErrorResponse;
 import com.example.avito.repository.UserRepository;
 import com.example.avito.service.AuthService;
 import com.example.avito.service.UserService;
@@ -54,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
         } catch (BadCredentialsException e) {
-            return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), INCORRECT_LOGIN_OR_PASSWORD), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), INCORRECT_LOGIN_OR_PASSWORD), HttpStatus.UNAUTHORIZED);
         }
         UserDetails userDetails = userService.loadUserByUsername(authRequest.getEmail());
         String token = jwtTokenUtils.generateToken(userDetails);
@@ -64,10 +64,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDto registrationUserDto) {
         if (!registrationUserDto.getPassword().equals(registrationUserDto.getConfirmPassword())) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), PASSWORDS_DID_NOT_MATCH), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), PASSWORDS_DID_NOT_MATCH), HttpStatus.UNAUTHORIZED);
         }
         if (userRepository.findByEmail(registrationUserDto.getEmail()).isPresent()) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST ), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST ), HttpStatus.BAD_REQUEST);
         }
 //        if(!Validation.isValidEmailAddress(registrationUserDto.getEmail())) {
 //            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), INVALID_EMAIL), HttpStatus.BAD_REQUEST);

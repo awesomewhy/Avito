@@ -1,4 +1,4 @@
-package com.example.avito.controller;
+package com.example.avito.controller.admin;
 
 import com.example.avito.entity.User;
 import com.example.avito.service.AdminService;

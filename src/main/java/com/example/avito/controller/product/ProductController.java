@@ -1,5 +1,6 @@
-package com.example.avito.controller;
+package com.example.avito.controller.product;
 
+import com.example.avito.dto.otherdto.PriceSortDto;
 import com.example.avito.dto.productdto.MyProductDto;
 import com.example.avito.dto.productdto.ProductSellDto;
 import com.example.avito.dto.productdto.ProductShowDto;
@@ -43,5 +44,15 @@ public class ProductController {
     @DeleteMapping("/profile/delete/{id}")
     public ResponseEntity<?> deleteProductById(@AuthenticationPrincipal String email, @PathVariable Long id) {
         return productService.deleteProductById(email, id);
+    }
+
+    @GetMapping("/sortbycity")
+    public List<ProductShowDto> sortByCity() {
+        return productService.sortProductsByCity();
+    }
+
+    @GetMapping("/sortbyprice")
+    public List<ProductShowDto> sortByPrice(@RequestBody PriceSortDto priceSortDto) throws Exception {
+        return productService.sortByPrice(priceSortDto);
     }
 }

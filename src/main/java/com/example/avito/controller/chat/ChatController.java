@@ -1,4 +1,4 @@
-package com.example.avito.controller;
+package com.example.avito.controller.chat;
 
 import com.example.avito.dto.otherdto.ChatMessageDto;
 import org.springframework.messaging.handler.annotation.MessageMapping;
