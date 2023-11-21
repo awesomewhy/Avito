@@ -1,6 +1,5 @@
 package com.example.avito.repository;
 
-import com.example.avito.dto.review.ReviewDto;
 import com.example.avito.entity.Review;
 import com.example.avito.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
