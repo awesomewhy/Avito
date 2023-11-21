@@ -135,7 +135,7 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
             return ResponseEntity.ok().body(PASSWORD_CHANGED_SUCCESSFULLY);
         } else {
-            return ResponseEntity.badRequest().body(OLD_PASSWORD_NOT_MATCH);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(404, OLD_PASSWORD_NOT_MATCH));
         }
     }
     @Override
@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserService {
             userRepository.delete(deleteUser.get());
             return ResponseEntity.ok().body(PROFILE_DELETED_SUCCESSFULLY);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(PROFILE_NOT_DELETED);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(401, PROFILE_NOT_DELETED));
         }
     }
 }

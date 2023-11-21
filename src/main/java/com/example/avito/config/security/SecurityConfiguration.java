@@ -27,18 +27,22 @@ public class SecurityConfiguration {
     private final JwtRequestFilter jwtRequestFilter;
     private final PasswordEncoderConfiguration passwordEncoderConfiguration;
 
-    private static final String SECURED = "/admin/secured";
-    private static final String INFO = "/user/info";
-    private static final String LOGIN = "/user/login";
-    private static final String ADD_ITEM = "/user/additem";
-    private static final String SORT_BY_CITY = "/sortbycity";
-    private static final String SORT_BY_PRICE = "/sortbyprice";
-    private static final String GET_ME = "/user/im";
-    private static final String UPDATE = "/user/update";
-    private static final String ADMIN = "/admin/admin";
+    // USER
+    private static final String LOGIN = "/auth/login";
+    private static final String REGISTRATION = "/auth/registration";
+    private static final String ADD_ITEM = "/additem";
+    private static final String PROFILE = "/profile";
+    private static final String MY_PRODUCTS = "/myproducts";
+    private static final String DELETE_PRODUCT = "/profile/safety/deleteproduct/{id}";
+    private static final String UPDATE = "/profile/safety/update";
+    private static final String CHANGE_PASSWORD = "/profile/safety/changepassword";
+    private static final String DELETE_PROFILE = "/profile/safety/deleteprofile";
+
+    // ADMIN
     private static final String USERS = "/admin/users";
     private static final String SET_USER_ROLE = "/userrole/{id}";
     private static final String SET_ADMIN_ROLE = "/adminrole/{id}";
+
 
     private void sharedSecurityConfiguration(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -54,7 +58,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChainUsersAPI(HttpSecurity httpSecurity) throws Exception {
         sharedSecurityConfiguration(httpSecurity);
         httpSecurity
-                .securityMatcher(SECURED, INFO, LOGIN, ADD_ITEM, GET_ME, UPDATE)
+                .securityMatcher(ADD_ITEM, PROFILE, UPDATE, CHANGE_PASSWORD, DELETE_PROFILE, MY_PRODUCTS, DELETE_PRODUCT)
                 .authorizeHttpRequests(auth -> {
                     auth.anyRequest().authenticated();
                 })
@@ -67,7 +71,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChainAdminsAPI(HttpSecurity httpSecurity) throws Exception {
         sharedSecurityConfiguration(httpSecurity);
         httpSecurity
-                .securityMatcher(ADMIN, USERS, SET_ADMIN_ROLE, SET_USER_ROLE)
+                .securityMatcher(USERS, SET_ADMIN_ROLE, SET_USER_ROLE)
                 .authorizeHttpRequests(auth -> {
                     auth.anyRequest().hasRole("ADMIN");
                 })
