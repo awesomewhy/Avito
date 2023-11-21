@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +43,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public ResponseEntity<?> setAdminRole(Long id) {
+    public ResponseEntity<?> setAdminRole(UUID id) {
         Optional<User> userOptional = adminRepository.findById(id);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
@@ -56,7 +57,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public ResponseEntity<?> setUserRole(Long id) {
+    public ResponseEntity<?> setUserRole(UUID id) {
         Optional<User> userOptional = adminRepository.findById(id);
         if (userOptional.isPresent()) {
             User user = userOptional.get();

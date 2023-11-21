@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,12 +21,12 @@ public class AdminController {
     }
 
     @PostMapping("/adminrole/{id}")
-    public ResponseEntity<?> setAdminRole(@PathVariable Long id) {
+    public ResponseEntity<?> setAdminRole(@PathVariable UUID id) {
         return adminService.setAdminRole(id);
     }
 
     @PostMapping("/userrole/{id}")
-    public ResponseEntity<?> setUserRole(@PathVariable Long id) {
+    public ResponseEntity<?> setUserRole(@PathVariable UUID id) {
         return adminService.setUserRole(id);
     }
 }
