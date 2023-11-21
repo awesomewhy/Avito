@@ -1,10 +1,12 @@
 package com.example.avito.service;
 
 import com.example.avito.dto.review.ReviewDto;
-import com.example.avito.entity.Review;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 public interface ReviewService {
-    ResponseEntity<?> createReview(@RequestBody ReviewDto reviewDto);
+    ResponseEntity<?> createReview(@PathVariable String uuid, @AuthenticationPrincipal String email, @RequestBody ReviewDto reviewDto);
+    ResponseEntity<?> getMyReviews(@AuthenticationPrincipal String email);
 }
