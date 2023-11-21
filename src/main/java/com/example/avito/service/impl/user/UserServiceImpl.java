@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> updateUser(@AuthenticationPrincipal String email, @RequestBody UpdateUserDto updateUserDto) {
+    public ResponseEntity<?> updateUser(@AuthenticationPrincipal String email, @RequestBody UpdateProfileDto updateUserDto) {
         CompletableFuture<ResponseEntity<?>> future = CompletableFuture.supplyAsync(() -> {
             Optional<User> updateUser = userRepository.findByEmail(email);
             if (updateUser.isPresent()) {

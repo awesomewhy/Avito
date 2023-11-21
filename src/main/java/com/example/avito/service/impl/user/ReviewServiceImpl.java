@@ -18,7 +18,6 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ResponseEntity<?> createReview(@RequestBody ReviewDto reviewDto) {
         Review review = new Review();
-        review.setUserId();
         review.setType(reviewDto.getType());
         review.setRating(reviewDto.getRating());
         review.setComment(reviewDto.getComment());

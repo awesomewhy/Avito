@@ -1,8 +1,8 @@
-package com.example.avito.controller.user;
+package com.example.avito.controller.user.profile;
 
 import com.example.avito.dto.userdto.ChangePasswordDto;
 import com.example.avito.dto.userdto.DeleteProfileDto;
-import com.example.avito.dto.userdto.UpdateUserDto;
+import com.example.avito.dto.userdto.UpdateProfileDto;
 import com.example.avito.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class SafetyController {
     private final UserService userService;
     @PostMapping("/update")
-    public ResponseEntity<?> updateUser(@AuthenticationPrincipal String email, @RequestBody UpdateUserDto updateUserDto) {
+    public ResponseEntity<?> updateUser(@AuthenticationPrincipal String email, @RequestBody UpdateProfileDto updateUserDto) {
         return userService.updateUser(email, updateUserDto);
     }
 

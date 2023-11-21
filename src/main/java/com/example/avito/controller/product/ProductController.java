@@ -41,7 +41,7 @@ public class ProductController {
         return productService.addItem(email, productDto);
     }
 
-    @DeleteMapping("/profile/delete/{id}")
+    @DeleteMapping("/profile/deleteproduct/{id}")
     public ResponseEntity<?> deleteProductById(@AuthenticationPrincipal String email, @PathVariable Long id) {
         return productService.deleteProductById(email, id);
     }
