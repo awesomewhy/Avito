@@ -20,6 +20,8 @@ Hibernate
 
 Docker
 
+Swagger
+
 JUnit
 
 Postgres
