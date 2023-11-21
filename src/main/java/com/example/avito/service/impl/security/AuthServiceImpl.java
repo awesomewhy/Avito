@@ -35,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
     private final static String USER_WHIT_THIS_EMAIL_EXIST = "user with email уже существует";
     private final static String PASSWORDS_DID_NOT_MATCH = "пароли не совпали";
     private final static String INCORRECT_LOGIN_OR_PASSWORD = "неправильный логин или пароль";
+    private final static String USER_REGISTER = "пользователь зарегестрирован";
     private final static String INVALID_EMAIL = "Неверно введенная почта";
     private final static String INVALID_PASSWORD = "Пароль введет с недопустимыми символами или пароль скишком маленький";
 
@@ -43,11 +44,6 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenUtils jwtTokenUtils;
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
-
-    @Override
-    public boolean createUser(RegisterRequestDto signupRequest) {
-        return false;
-    }
 
     @Override
     public ResponseEntity<?> createAuthToken(@RequestBody JwtRequestDto authRequest) {
@@ -76,6 +72,6 @@ public class AuthServiceImpl implements AuthService {
 //            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), INVALID_PASSWORD), HttpStatus.BAD_REQUEST);
 //        }
         User user = userService.createNewUser(registrationUserDto);
-        return ResponseEntity.ok(new UserDto(user.getId(), user.getUsername(), user.getEmail()));
+        return ResponseEntity.ok().body(USER_REGISTER);
     }
 }

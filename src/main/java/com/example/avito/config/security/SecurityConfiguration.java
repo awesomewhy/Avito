@@ -33,10 +33,15 @@ public class SecurityConfiguration {
     private static final String ADD_ITEM = "/additem";
     private static final String PROFILE = "/profile";
     private static final String MY_PRODUCTS = "/myproducts";
+    private static final String ALL_PRODUCTS = "/";
     private static final String DELETE_PRODUCT = "/profile/safety/deleteproduct/{id}";
     private static final String UPDATE = "/profile/safety/update";
     private static final String CHANGE_PASSWORD = "/profile/safety/changepassword";
     private static final String DELETE_PROFILE = "/profile/safety/deleteprofile";
+
+    // REVIEW
+    private static final String GET_MY_REVIEWS = "/profile/reviews";
+    private static final String ADD_REVIEW = "/user/create/{id}";
 
     // ADMIN
     private static final String USERS = "/admin/users";
@@ -58,7 +63,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChainUsersAPI(HttpSecurity httpSecurity) throws Exception {
         sharedSecurityConfiguration(httpSecurity);
         httpSecurity
-                .securityMatcher(ADD_ITEM, PROFILE, UPDATE, CHANGE_PASSWORD, DELETE_PROFILE, MY_PRODUCTS, DELETE_PRODUCT)
+                .securityMatcher(ADD_ITEM, PROFILE, UPDATE, CHANGE_PASSWORD, DELETE_PROFILE,
+                        MY_PRODUCTS, DELETE_PRODUCT, ALL_PRODUCTS, GET_MY_REVIEWS, ADD_REVIEW)
                 .authorizeHttpRequests(auth -> {
                     auth.anyRequest().authenticated();
                 })

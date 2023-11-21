@@ -14,10 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public class ReviewController {
     public final ReviewService reviewService;
-    @GetMapping("/")
-    public ResponseEntity<?> getMyReviews(@AuthenticationPrincipal String email) {
-        return reviewService.getMyReviews(email);
-    }
     @PostMapping("/create/{id}")
     public ResponseEntity<?> createReview(@PathVariable String id, @AuthenticationPrincipal String email, @RequestBody ReviewDto reviewDto) {
         return reviewService.createReview(id, email, reviewDto);
