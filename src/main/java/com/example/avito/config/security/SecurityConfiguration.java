@@ -41,6 +41,7 @@ public class SecurityConfiguration {
 
     // REVIEW
     private static final String GET_MY_REVIEWS = "/profile/reviews";
+    private static final String AVERAGE = "/user/average";
     private static final String ADD_REVIEW = "/user/create/{id}";
 
     // ADMIN
@@ -64,7 +65,7 @@ public class SecurityConfiguration {
         sharedSecurityConfiguration(httpSecurity);
         httpSecurity
                 .securityMatcher(ADD_ITEM, PROFILE, UPDATE, CHANGE_PASSWORD, DELETE_PROFILE,
-                        MY_PRODUCTS, DELETE_PRODUCT, ALL_PRODUCTS, GET_MY_REVIEWS, ADD_REVIEW)
+                        MY_PRODUCTS, DELETE_PRODUCT, ALL_PRODUCTS, GET_MY_REVIEWS, ADD_REVIEW, AVERAGE)
                 .authorizeHttpRequests(auth -> {
                     auth.anyRequest().authenticated();
                 })

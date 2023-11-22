@@ -11,6 +11,7 @@ import com.example.avito.mapper.ProductMapper;
 import com.example.avito.repository.ProductRepository;
 import com.example.avito.repository.UserRepository;
 import com.example.avito.service.ProductService;
+import com.example.avito.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -39,12 +40,12 @@ public class ProductServiceImpl implements ProductService {
     private final static String START_PRICE_AND_END_PRICE_MUST_BE_PROVIDED = "Необходимо указать начальную и конечную цену";
 
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final ProductMapper productMapper;
 
     @Override
-    public ResponseEntity<?> addItem(@AuthenticationPrincipal String email, @RequestBody ProductSellDto productDto) {
-        Optional<User> user = userRepository.findByEmail(email);
+    public ResponseEntity<?> addItem(@RequestBody ProductSellDto productDto) {
+        Optional<User> user = userService.getAuthenticationPrincipalUserByEmail();
 
         if (user.isPresent()) {
             Product product = new Product();
@@ -91,9 +92,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseEntity<?> deleteProductById(@AuthenticationPrincipal String email, Long id) {
+    public ResponseEntity<?> deleteProductById(Long id) {
         Optional<Product> product = productRepository.findById(id);
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> user = userService.getAuthenticationPrincipalUserByEmail();
 
         if (product.isPresent() && user.isPresent()) {
             if (product.get().getCreatorId().getId().equals(user.get().getId())) {
@@ -107,8 +108,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<MyProductDto> getMyProducts(@AuthenticationPrincipal String email) {
-        Optional<User> user = userRepository.findByEmail(email);
+    public List<MyProductDto> getMyProducts() {
+        Optional<User> user = userService.getAuthenticationPrincipalUserByEmail();
         User currentUser = user.orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
         List<Product> products = productRepository.findAllByCreatorId(currentUser);
 

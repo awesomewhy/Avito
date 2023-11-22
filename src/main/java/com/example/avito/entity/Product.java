@@ -22,7 +22,7 @@ public class Product {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "creator_id")
     private User creatorId;
 
     @NotNull

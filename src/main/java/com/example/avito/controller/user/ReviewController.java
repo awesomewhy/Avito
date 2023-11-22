@@ -17,7 +17,11 @@ import java.util.List;
 public class ReviewController {
     public final ReviewService reviewService;
     @PostMapping("/create/{id}")
-    public ResponseEntity<?> createReview(@PathVariable String id, @AuthenticationPrincipal String email, @RequestBody ReviewDto reviewDto) {
-        return reviewService.createReview(id, email, reviewDto);
+    public ResponseEntity<?> createReview(@PathVariable String id, @RequestBody ReviewDto reviewDto) {
+        return reviewService.createReview(id, reviewDto);
+    }
+    @GetMapping("/average")
+    public ResponseEntity<?> getAverageRating() {
+        return reviewService.getAverageRating();
     }
 }

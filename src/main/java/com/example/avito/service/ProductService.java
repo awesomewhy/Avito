@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 public interface ProductService{
-    ResponseEntity<?> addItem(@AuthenticationPrincipal String email, @RequestBody ProductSellDto productDto);
+    ResponseEntity<?> addItem(@RequestBody ProductSellDto productDto);
     List<ProductShowDto> getAllProducts();
     List<ProductShowDto> sortProductsByCity();
     List<ProductShowDto> sortByPrice(@RequestBody PriceSortDto priceSortDto) throws Exception;
-    ResponseEntity<?> deleteProductById(@AuthenticationPrincipal String email, Long id);
-    List<MyProductDto> getMyProducts(@AuthenticationPrincipal String email);
+    ResponseEntity<?> deleteProductById(Long id);
+    List<MyProductDto> getMyProducts();
 }

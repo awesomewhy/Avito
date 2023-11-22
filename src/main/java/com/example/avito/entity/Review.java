@@ -1,13 +1,17 @@
 package com.example.avito.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
-@Table(name = "review")
+@Table(name = "reviews")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,7 +33,7 @@ public class Review {
     private String type;
 
     @Column(name = "rating")
-    private Byte rating;
+    private BigDecimal rating;
 
     @Column(name = "comment")
     private String comment;

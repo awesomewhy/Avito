@@ -2,9 +2,6 @@ package com.example.avito.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
-
-import javax.validation.constraints.Email;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -25,7 +22,7 @@ public class User {
     private String username;
 
     @Column(name = "nickname")
-    private String nickname;
+    private String nickname = "";
 
     @Column(name = "password")
     private String password;
@@ -44,4 +41,9 @@ public class User {
     )
     private Collection<Role> roles;
 
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
+    private Collection<Review> reviews;
+
+    @OneToMany(mappedBy = "creatorId", cascade = CascadeType.ALL)
+    private Collection<Product> products;
 }

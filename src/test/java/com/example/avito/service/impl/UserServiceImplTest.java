@@ -74,7 +74,7 @@ class UserServiceImplTest {
                 .build();
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
-        ResponseEntity<?> response = userService.updateUser("test@test.com", updateUserDto);
+        ResponseEntity<?> response = userService.updateUser(updateUserDto);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("user not found", response.getBody());
@@ -93,7 +93,7 @@ class UserServiceImplTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
         UserServiceImpl userService = new UserServiceImpl(userRepository, roleService, passwordEncoder);
 
-        ResponseEntity<?> response = userService.getMyProfile(email);
+        ResponseEntity<?> response = userService.getMyProfile();
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.getBody() instanceof MyProfileDto);
@@ -111,7 +111,7 @@ class UserServiceImplTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
         UserServiceImpl userService = new UserServiceImpl(userRepository, roleService, passwordEncoder);
 
-        ResponseEntity<?> response = userService.getMyProfile(email);
+        ResponseEntity<?> response = userService.getMyProfile();
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
@@ -149,7 +149,7 @@ class UserServiceImplTest {
         when(passwordEncoder.encode(anyString())).thenReturn("newEncodedPassword");
         when(userRepository.save(any(User.class))).thenReturn(user);
 
-        ResponseEntity<?> response = userService.changePassword("test@test.com", changePasswordDto);
+        ResponseEntity<?> response = userService.changePassword(changePasswordDto);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Пароль успешно изменен", response.getBody());
@@ -166,7 +166,7 @@ class UserServiceImplTest {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
 
-        ResponseEntity<?> response = userService.changePassword("test@test.com", changePasswordDto);
+        ResponseEntity<?> response = userService.changePassword(changePasswordDto);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Пароль не должен совпадать со старым", response.getBody());
@@ -181,7 +181,7 @@ class UserServiceImplTest {
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
         doNothing().when(userRepository).delete(any(User.class));
 
-        ResponseEntity<?> response = userService.deleteProfile("test@test.com", deleteProfileDto);
+        ResponseEntity<?> response = userService.deleteProfile(deleteProfileDto);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Профиль успешно удален", response.getBody());
@@ -195,7 +195,7 @@ class UserServiceImplTest {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
-        ResponseEntity<?> response = userService.deleteProfile("test@test.com", deleteProfileDto);
+        ResponseEntity<?> response = userService.deleteProfile(deleteProfileDto);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertEquals(new ErrorResponse(401,"Профиль не удален, неверный пароль"), response.getBody());

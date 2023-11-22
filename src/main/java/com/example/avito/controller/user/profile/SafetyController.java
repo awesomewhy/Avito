@@ -15,17 +15,17 @@ import org.springframework.web.bind.annotation.*;
 public class SafetyController {
     private final UserService userService;
     @PostMapping("/update")
-    public ResponseEntity<?> updateUser(@AuthenticationPrincipal String email, @RequestBody UpdateProfileDto updateUserDto) {
-        return userService.updateUser(email, updateUserDto);
+    public ResponseEntity<?> updateUser(@RequestBody UpdateProfileDto updateUserDto) {
+        return userService.updateUser(updateUserDto);
     }
 
     @PostMapping("/changepassword")
-    public ResponseEntity<?> changePassword(@AuthenticationPrincipal String email, @RequestBody ChangePasswordDto changePasswordDto) {
-        return userService.changePassword(email, changePasswordDto);
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
+        return userService.changePassword(changePasswordDto);
     }
 
     @PostMapping("/deleteprofile")
-    public ResponseEntity<?> deleteProfile(@AuthenticationPrincipal String email, @RequestBody DeleteProfileDto deleteProfileDto) {
-        return userService.deleteProfile(email, deleteProfileDto);
+    public ResponseEntity<?> deleteProfile(@RequestBody DeleteProfileDto deleteProfileDto) {
+        return userService.deleteProfile(deleteProfileDto);
     }
 }

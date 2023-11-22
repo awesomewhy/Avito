@@ -15,12 +15,12 @@ public class UserController {
     private final ReviewService reviewService;
 
     @GetMapping("/profile")
-    public ResponseEntity<?> getMyProfile(@AuthenticationPrincipal String email) {
-        return userService.getMyProfile(email);
+    public ResponseEntity<?> getMyProfile() {
+        return userService.getMyProfile();
     }
 
     @GetMapping("/profile/reviews")
-    public ResponseEntity<?> getMyReviews(@AuthenticationPrincipal String email) {
-        return reviewService.getMyReviews(email);
+    public ResponseEntity<?> getMyReviews() {
+        return reviewService.getMyReviews();
     }
 }

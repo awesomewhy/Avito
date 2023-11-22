@@ -21,11 +21,11 @@ public class ProductController {
     private final AdminService adminService;
 
     @GetMapping("/myproducts")
-    public List<MyProductDto> getMyProducts(@AuthenticationPrincipal String email) {
+    public List<MyProductDto> getMyProducts() {
 //        List<Product> products = productService.getMyProducts();
 //        return adminService.convertObjectsToJson(products);
 
-        return productService.getMyProducts(email);
+        return productService.getMyProducts();
     }
 
     @GetMapping("/")
@@ -37,13 +37,13 @@ public class ProductController {
     }
 
     @PostMapping("/additem")
-    public ResponseEntity<?> addProduct(@AuthenticationPrincipal String email, @RequestBody ProductSellDto productDto) {
-        return productService.addItem(email, productDto);
+    public ResponseEntity<?> addProduct(@RequestBody ProductSellDto productDto) {
+        return productService.addItem(productDto);
     }
 
     @DeleteMapping("/profile/deleteproduct/{id}")
-    public ResponseEntity<?> deleteProductById(@AuthenticationPrincipal String email, @PathVariable Long id) {
-        return productService.deleteProductById(email, id);
+    public ResponseEntity<?> deleteProductById(@PathVariable Long id) {
+        return productService.deleteProductById(id);
     }
 
     @GetMapping("/sortbycity")

@@ -60,7 +60,7 @@ class ProductServiceImplTest {
         when(productRepository.save(any(Product.class))).thenReturn(new Product());
         when(productMapper.mapToProductShowDto(any(Product.class))).thenReturn(new ProductShowDto());
 
-        ResponseEntity<?> response = productService.addItem(email, productDto);
+        ResponseEntity<?> response = productService.addItem(productDto);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
@@ -77,7 +77,7 @@ class ProductServiceImplTest {
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
-        ResponseEntity<?> response = productService.addItem(email, productDto);
+        ResponseEntity<?> response = productService.addItem(productDto);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }

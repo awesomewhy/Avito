@@ -10,15 +10,19 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import java.util.Optional;
 import java.util.concurrent.*;
 import java.util.List;
@@ -33,54 +37,49 @@ public class UserServiceImpl implements UserService {
     private final static String USER_NOT_FOUND_BY_EMAIL = "user with email %s not found";
     private final static String USER_WHIT_THIS_EMAIL_EXIST = "user with this email exist";
     private final static String USER_NOT_FOUND = "user not found";
-    private final static String PASSWORD_MATCHED = "Пароль не должен совпадать со старым";
-    private final static String BAD_PASSWORD = "неверно введен пароль";
-    private final static String USER_SAVED = "Пользователь сохранен";
-    private final static String PASSWORD_CHANGED_SUCCESSFULLY = "Пароль успешно изменен";
-    private final static String OLD_PASSWORD_NOT_MATCH = "Старый пароль не совпадает";
-    private final static String PROFILE_DELETED_SUCCESSFULLY = "Профиль успешно удален";
-    private final static String PROFILE_NOT_DELETED = "Профиль не удален, неверный пароль";
+    private final static String PASSWORD_MATCHED = "password must not be the same as the old one";
+    private final static String BAD_PASSWORD = "password is entered incorrectly";
+    private final static String USER_SAVED = "User saved";
+    private final static String PASSWORD_CHANGED_SUCCESSFULLY = "Password changed successfully";
+    private final static String OLD_PASSWORD_NOT_MATCH = "Old password doesn't match";
+    private final static String PROFILE_DELETED_SUCCESSFULLY = "Profile deleted successfully";
+    private final static String PROFILE_NOT_DELETED = "Profile not deleted, incorrect password";
 
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
-
-
     @Override
-    @Transactional
-    public ResponseEntity<?> updateUser(@AuthenticationPrincipal String email, @RequestBody UpdateProfileDto updateUserDto) {
-        CompletableFuture<ResponseEntity<?>> future = CompletableFuture.supplyAsync(() -> {
-            Optional<User> updateUser = userRepository.findByEmail(email);
-            if (updateUser.isPresent()) {
-                if (userRepository.findByEmail(updateUserDto.getEmail()).isPresent()) {
-                    return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST), HttpStatus.BAD_REQUEST);
-                }
-
-                User user = updateUser.get();
-                user.setUsername(updateUserDto.getUsername());
-                user.setNickname(updateUserDto.getNickname());
-                user.setEmail(updateUserDto.getEmail());
-                user.setCity(updateUserDto.getCity());
-                userRepository.save(user);
-
-                return ResponseEntity.ok().body(USER_SAVED);
-            } else {
-                return ResponseEntity.badRequest().body(USER_NOT_FOUND);
-            }
-        });
-
-        try {
-            return future.get(5, TimeUnit.SECONDS);
-        } catch (TimeoutException e) {
-            future.cancel(true);
-            return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body("Запрос слишком долгий");
-        } catch (InterruptedException | ExecutionException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ошибка сервера");
-        }
+    public Optional<User> getAuthenticationPrincipalUserByEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = (String) authentication.getPrincipal();
+        return userRepository.findByEmail(email);
     }
     @Override
-    public ResponseEntity<?> getMyProfile(@AuthenticationPrincipal String email) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
+    @Transactional
+    public ResponseEntity<?> updateUser(@RequestBody UpdateProfileDto updateUserDto) {
+        Optional<User> updateUser = getAuthenticationPrincipalUserByEmail();
+        if (updateUser.isPresent()) {
+            if (userRepository.findByEmail(updateUserDto.getEmail()).isPresent()) {
+                return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST), HttpStatus.BAD_REQUEST);
+            }
+
+            User user = updateUser.get();
+            user.setUsername(updateUserDto.getUsername());
+            user.setNickname(updateUserDto.getNickname());
+            user.setEmail(updateUserDto.getEmail());
+            user.setCity(updateUserDto.getCity());
+            userRepository.save(user);
+
+            return ResponseEntity.ok().body(USER_SAVED);
+        } else {
+            return ResponseEntity.badRequest().body(USER_NOT_FOUND);
+        }
+
+    }
+
+    @Override
+    public ResponseEntity<?> getMyProfile() {
+        Optional<User> userOptional = getAuthenticationPrincipalUserByEmail();
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             MyProfileDto myProfileDto = new MyProfileDto();
@@ -120,14 +119,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> changePassword(@AuthenticationPrincipal String email, @RequestBody ChangePasswordDto changePasswordDto) {
-        Optional<User> updateUser = userRepository.findByEmail(email);
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
+        Optional<User> updateUser = getAuthenticationPrincipalUserByEmail();
 
         if (updateUser.isPresent() && passwordEncoder.matches(changePasswordDto.getOldPassword(), updateUser.get().getPassword())) {
-            if(passwordEncoder.matches(changePasswordDto.getNewPassword(), updateUser.get().getPassword())) {
+            if (passwordEncoder.matches(changePasswordDto.getNewPassword(), updateUser.get().getPassword())) {
                 return ResponseEntity.badRequest().body(PASSWORD_MATCHED);
             }
-            if(!changePasswordDto.getNewPassword().equals(changePasswordDto.getRepeatPassword())) {
+            if (!changePasswordDto.getNewPassword().equals(changePasswordDto.getRepeatPassword())) {
                 return ResponseEntity.badRequest().body(BAD_PASSWORD);
             }
             User user = updateUser.get();
@@ -138,11 +137,10 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(404, OLD_PASSWORD_NOT_MATCH));
         }
     }
-    @Override
-    @Transactional
-    public ResponseEntity<?> deleteProfile(@AuthenticationPrincipal String email, @RequestBody DeleteProfileDto deleteProfileDto) {
-        Optional<User> deleteUser = userRepository.findByEmail(email);
 
+    @Override
+    public ResponseEntity<?> deleteProfile(@RequestBody DeleteProfileDto deleteProfileDto) {
+        Optional<User> deleteUser = getAuthenticationPrincipalUserByEmail();
         if (deleteUser.isPresent() && passwordEncoder.matches(deleteProfileDto.getPassword(), deleteUser.get().getPassword())) {
             userRepository.delete(deleteUser.get());
             return ResponseEntity.ok().body(PROFILE_DELETED_SUCCESSFULLY);
