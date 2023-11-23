@@ -38,28 +38,28 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewMapper reviewMapper;
 
     private final static String COMMENT_NOT_ADDED = "comment not added";
+    private final static String COMMENT_ADDED = "comment added";
     private final static String USER_NOT_FOUND = "user not found";
 
     @Override
     public ResponseEntity<?> createReview(@PathVariable String uuid, @RequestBody ReviewDto reviewDto) {
         Optional<User> reviewer = userService.getAuthenticationPrincipalUserByEmail();
-        if (reviewer.isPresent()) {
-            Optional<User> user = userRepository.findById(UUID.fromString(uuid));
-            if (user.isPresent()) {
-                Review review = new Review();
-                review.setUserId(user.get());
-                review.setReviewerId(reviewer.get());
-                review.setType(reviewDto.getType());
-                review.setRating(reviewDto.getRating());
-                review.setComment(reviewDto.getComment());
-                reviewRepository.save(review);
-                return ResponseEntity.ok().body("comment added");
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(400, COMMENT_NOT_ADDED));
-            }
-        } else {
+        if (reviewer.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(404, USER_NOT_FOUND));
         }
+        Optional<User> user = userRepository.findById(UUID.fromString(uuid));
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(400, COMMENT_NOT_ADDED));
+        }
+        Review review = Review.builder()
+                .userId(user.get())
+                .reviewerId(reviewer.get())
+                .type(reviewDto.getType())
+                .rating(reviewDto.getRating())
+                .comment(reviewDto.getComment())
+                .build();
+        reviewRepository.save(review);
+        return ResponseEntity.ok().body(COMMENT_ADDED);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class ReviewServiceImpl implements ReviewService {
                     sum = sum.add(ratings.get(i));
                 }
                 return ResponseEntity.ok().body(new BigDecimal(String.valueOf(sum.divide(BigDecimal.valueOf(ratings.size()), 1, RoundingMode.HALF_UP))));
-            }  else {
+            } else {
                 return ResponseEntity.ok().body(BigDecimal.ZERO);
             }
         } else {
