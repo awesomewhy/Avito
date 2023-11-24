@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
     Optional<User> getAuthenticationPrincipalUserByEmail();
-    User createNewUser(@RequestBody RegistrationUserDto registrationUserDto);
+    void  createNewUser(@RequestBody RegistrationUserDto registrationUserDto);
     ResponseEntity<?> updateUser(@RequestBody UpdateProfileDto updateUserDto);
     ResponseEntity<?> getMyProfile();
     ResponseEntity<?> changePassword(@RequestBody ChangePasswordDto changePasswordDto);

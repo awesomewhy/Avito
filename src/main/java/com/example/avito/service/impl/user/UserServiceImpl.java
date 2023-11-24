@@ -10,11 +10,9 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
-import java.util.concurrent.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,33 +45,34 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
+
     @Override
     public Optional<User> getAuthenticationPrincipalUserByEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = (String) authentication.getPrincipal();
         return userRepository.findByEmail(email);
     }
+
     @Override
     @Transactional
     public ResponseEntity<?> updateUser(@RequestBody UpdateProfileDto updateUserDto) {
         Optional<User> updateUser = getAuthenticationPrincipalUserByEmail();
-        if (updateUser.isPresent()) {
-            if (userRepository.findByEmail(updateUserDto.getEmail()).isPresent()) {
-                return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST), HttpStatus.BAD_REQUEST);
-            }
-
-            User user = updateUser.get();
-            user.setUsername(updateUserDto.getUsername());
-            user.setNickname(updateUserDto.getNickname());
-            user.setEmail(updateUserDto.getEmail());
-            user.setCity(updateUserDto.getCity());
-            userRepository.save(user);
-
-            return ResponseEntity.ok().body(USER_SAVED);
-        } else {
-            return ResponseEntity.badRequest().body(USER_NOT_FOUND);
+        if (updateUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(404, USER_NOT_FOUND));
+        }
+        if (userRepository.findByEmail(updateUserDto.getEmail()).isPresent()) {
+            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST), HttpStatus.BAD_REQUEST);
         }
 
+        User user = updateUser.get();
+        user.setUsername(updateUserDto.getUsername());
+        user.setNickname(updateUserDto.getNickname());
+        user.setEmail(updateUserDto.getEmail());
+        user.setCity(updateUserDto.getCity());
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok().body(USER_SAVED);
     }
 
     @Override
@@ -89,7 +87,7 @@ public class UserServiceImpl implements UserService {
             myProfileDto.setCity(user.getCity());
             return ResponseEntity.ok(myProfileDto);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(404, USER_NOT_FOUND));
         }
     }
 
@@ -107,14 +105,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User createNewUser(@RequestBody RegistrationUserDto registrationUserDto) {
+    public void createNewUser(@RequestBody RegistrationUserDto registrationUserDto) {
         User user = User.builder()
                 .username(registrationUserDto.getUsername())
-                    .email(registrationUserDto.getEmail())
-                        .password(passwordEncoder.encode(registrationUserDto.getPassword()))
-                            .city(registrationUserDto.getCity())
-                                .roles(List.of(roleService.getUserRole())).build();
-        return userRepository.save(user);
+                .email(registrationUserDto.getEmail())
+                .password(passwordEncoder.encode(registrationUserDto.getPassword()))
+                .city(registrationUserDto.getCity())
+                .roles(List.of(roleService.getUserRole())).build();
+        userRepository.save(user);
     }
 
     @Override
@@ -139,6 +137,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> deleteProfile(@RequestBody DeleteProfileDto deleteProfileDto) {
         Optional<User> deleteUser = getAuthenticationPrincipalUserByEmail();
         if (deleteUser.isPresent() && passwordEncoder.matches(deleteProfileDto.getPassword(), deleteUser.get().getPassword())) {
@@ -148,4 +147,17 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(401, PROFILE_NOT_DELETED));
         }
     }
+
+
+//    @Override
+//    @Transactional
+//    public <T extends DeleteProfileDto> ResponseEntity<?> deleteProfile2(@RequestBody T deleteProfileDto) {
+//        Optional<User> deleteUser = getAuthenticationPrincipalUserByEmail();
+//        if (deleteUser.isPresent() && passwordEncoder.matches(deleteProfileDto.getPassword(), deleteUser.get().getPassword())) {
+//            userRepository.delete(deleteUser.get());
+//            return ResponseEntity.ok().body(PROFILE_DELETED_SUCCESSFULLY);
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(401, PROFILE_NOT_DELETED));
+//        }
+//    }
 }

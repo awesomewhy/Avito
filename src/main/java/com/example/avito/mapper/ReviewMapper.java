@@ -1,8 +1,6 @@
 package com.example.avito.mapper;
 
-import com.example.avito.dto.productdto.MyProductDto;
-import com.example.avito.dto.review.ReviewDto;
-import com.example.avito.entity.Product;
+import com.example.avito.dto.reviewdto.ReviewDto;
 import com.example.avito.entity.Review;
 import org.springframework.stereotype.Component;
 

@@ -71,7 +71,7 @@ public class AuthServiceImpl implements AuthService {
 //        if(!Validation.isValidPassword(registrationUserDto.getPassword())) {
 //            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), INVALID_PASSWORD), HttpStatus.BAD_REQUEST);
 //        }
-        User user = userService.createNewUser(registrationUserDto);
+        userService.createNewUser(registrationUserDto);
         return ResponseEntity.ok().body(USER_REGISTER);
     }
 }

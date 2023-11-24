@@ -1,4 +1,4 @@
-package com.example.avito.dto.review;
+package com.example.avito.dto.reviewdto;
 
 import lombok.Data;
 

@@ -46,4 +46,5 @@ public class User {
 
     @OneToMany(mappedBy = "creatorId", cascade = CascadeType.ALL)
     private Collection<Product> products;
+
 }

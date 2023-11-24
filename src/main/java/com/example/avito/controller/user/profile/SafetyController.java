@@ -6,7 +6,6 @@ import com.example.avito.dto.userdto.UpdateProfileDto;
 import com.example.avito.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class SafetyController {
     private final UserService userService;
+
     @PostMapping("/update")
     public ResponseEntity<?> updateUser(@RequestBody UpdateProfileDto updateUserDto) {
         return userService.updateUser(updateUserDto);
