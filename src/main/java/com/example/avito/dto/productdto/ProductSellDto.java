@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class ProductSellDto {
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "creatorId")
     private User creatorId;
     private BigDecimal price;
     private String type;
