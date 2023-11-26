@@ -33,3 +33,27 @@ Lombok
 Maven
 
 Микросервис
+
+# Routes
+
+# User
+/profile/safety - /update , /changepassword , /deleteprofile
+/profile/settings - ?
+/profile 
+/profile/reviews
+
+# Admin
+/admin - /users , /adminrole/{id} , /userrole/{id}
+
+# Product 
+/myproducts
+/
+/additem
+/profile/deleteproduct/{id}
+
+# Review
+/user - /create/{id} , /average
+
+# Authefication
+/auth - /login , /registration
+
