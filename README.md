@@ -38,8 +38,11 @@ Maven
 
 # User
 /profile/safety - /update , /changepassword , /deleteprofile
+
 /profile/settings - ?
+
 /profile 
+
 /profile/reviews
 
 # Admin
@@ -47,8 +50,11 @@ Maven
 
 # Product 
 /myproducts
+
 /
+
 /additem
+
 /profile/deleteproduct/{id}
 
 # Review
