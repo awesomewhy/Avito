@@ -18,21 +18,14 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-    private final AdminService adminService;
 
     @GetMapping("/myproducts")
-    public List<MyProductDto> getMyProducts() {
-//        List<Product> products = productService.getMyProducts();
-//        return adminService.convertObjectsToJson(products);
-
+    public ResponseEntity<?> getMyProducts() {
         return productService.getMyProducts();
     }
 
     @GetMapping("/")
     public List<ProductShowDto> getAllProducts() {
-//        List<ProductShowDto> products = productService.getAllProducts();
-//        return adminService.convertObjectsToJson(products);
-
         return productService.getAllProducts();
     }
 

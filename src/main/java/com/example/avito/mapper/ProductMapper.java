@@ -3,6 +3,7 @@ package com.example.avito.mapper;
 import com.example.avito.dto.productdto.MyProductDto;
 import com.example.avito.dto.productdto.ProductShowDto;
 import com.example.avito.entity.Product;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Component
 public class ProductMapper {
-    public List<MyProductDto> mapToMyProductDtos(List<Product> products) {
+    public ResponseEntity<List<MyProductDto>> mapToMyProductDtos(List<Product> products) {
         List<MyProductDto> myProductDtos = new ArrayList<>();
         for (Product product : products) {
             MyProductDto myProductDto = new MyProductDto();
@@ -22,7 +23,7 @@ public class ProductMapper {
 
             myProductDtos.add(myProductDto);
         }
-        return myProductDtos;
+        return ResponseEntity.ok(myProductDtos);
     }
 
     public ProductShowDto mapToProductShowDto(Product product) {

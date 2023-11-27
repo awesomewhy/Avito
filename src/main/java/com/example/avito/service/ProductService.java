@@ -16,5 +16,5 @@ public interface ProductService{
     List<ProductShowDto> sortProductsByCity();
     List<ProductShowDto> sortByPrice(@RequestBody PriceSortDto priceSortDto) throws Exception;
     ResponseEntity<?> deleteProductById(Long id);
-    List<MyProductDto> getMyProducts();
+    ResponseEntity<?> getMyProducts();
 }

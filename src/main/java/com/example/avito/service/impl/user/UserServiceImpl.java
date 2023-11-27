@@ -37,7 +37,6 @@ public class UserServiceImpl implements UserService {
     private final static String USER_WHIT_THIS_EMAIL_EXIST = "user with this email exist";
     private final static String USER_NOT_FOUND = "user not found";
     private final static String PASSWORD_MATCHED = "password must not be the same as the old one";
-    private final static String BAD_PASSWORD = "password is entered incorrectly";
     private final static String USER_SAVED = "User saved";
     private final static String EMAIL_NULL = "Email is null";
     private final static String PASSWORD_NULL = "password is null";

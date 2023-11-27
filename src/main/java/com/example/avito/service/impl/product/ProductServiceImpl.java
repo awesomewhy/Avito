@@ -101,16 +101,19 @@ public class ProductServiceImpl implements ProductService {
                 productRepository.deleteById(id);
                 return ResponseEntity.ok().body(PRODUCT_DELETED_SUCCESSFULLY);
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(404, PRODUCT_NOT_FOUND));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), PRODUCT_NOT_FOUND));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(404, USER_NOT_FOUND));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), USER_NOT_FOUND));
         }
     }
 
     @Override
-    public List<MyProductDto> getMyProducts() {
+    public ResponseEntity<?> getMyProducts() {
         Optional<User> user = userService.getAuthenticationPrincipalUserByEmail();
-        User currentUser = user.orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), USER_NOT_FOUND));
+        }
+        User currentUser = user.get();
         List<Product> products = productRepository.findAllByCreatorId(currentUser);
 
         return productMapper.mapToMyProductDtos(products);
