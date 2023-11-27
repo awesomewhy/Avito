@@ -4,8 +4,6 @@ Java 17
 
 REST API
 
-Реализован чат на WebSocket
-
 JWT
 
 Spring Boot
@@ -31,5 +29,7 @@ Git
 Lombok
 
 Maven
+
+Реализован чат на WebSocket
 
 Микросервис
