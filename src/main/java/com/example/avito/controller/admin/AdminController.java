@@ -29,4 +29,9 @@ public class AdminController {
     public ResponseEntity<?> setUserRole(@PathVariable UUID id) {
         return adminService.setUserRole(id);
     }
+    @PostMapping("/deleteuser/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable UUID id) {
+        return adminService.deleteUserById(id);
+    }
+
 }

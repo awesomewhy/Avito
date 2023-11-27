@@ -12,4 +12,5 @@ public interface AdminService {
     List<User> getAllUsers();
     ResponseEntity<?> setAdminRole(UUID id);
     ResponseEntity<?> setUserRole(UUID id);
+    ResponseEntity<?> deleteUserById(UUID id);
 }

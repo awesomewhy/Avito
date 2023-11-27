@@ -11,6 +11,7 @@ import com.example.avito.repository.UserRepository;
 import com.example.avito.service.AuthService;
 import com.example.avito.service.UserService;
 import com.example.avito.util.JwtTokenUtils;
+import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -47,14 +48,24 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<?> createAuthToken(@RequestBody JwtRequestDto authRequest) {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
-        } catch (BadCredentialsException e) {
-            return new ResponseEntity<>(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), INCORRECT_LOGIN_OR_PASSWORD), HttpStatus.UNAUTHORIZED);
+        if (StringUtils.isEmpty(authRequest.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Email is required"));
         }
-        UserDetails userDetails = userService.loadUserByUsername(authRequest.getEmail());
-        String token = jwtTokenUtils.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponseDto(token));
+
+        if (StringUtils.isEmpty(authRequest.getPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Password is required"));
+        }
+        try {
+            authenticateUser(authRequest.getEmail(), authRequest.getPassword());
+            UserDetails userDetails = userService.loadUserByUsername(authRequest.getEmail());
+            String token = jwtTokenUtils.generateToken(userDetails);
+            return ResponseEntity.ok(new JwtResponseDto(token));
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), INCORRECT_LOGIN_OR_PASSWORD));
+        }
     }
 
     @Override
@@ -73,5 +84,9 @@ public class AuthServiceImpl implements AuthService {
 //        }
         userService.createNewUser(registrationUserDto);
         return ResponseEntity.ok().body(USER_REGISTER);
+    }
+
+    private void authenticateUser(String email, String password) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
     }
 }

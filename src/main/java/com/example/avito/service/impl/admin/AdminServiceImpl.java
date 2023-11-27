@@ -2,6 +2,7 @@ package com.example.avito.service.impl.admin;
 
 import com.example.avito.entity.User;
 import com.example.avito.repository.AdminRepository;
+import com.example.avito.repository.UserRepository;
 import com.example.avito.service.AdminService;
 import com.example.avito.service.RoleService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,6 +23,7 @@ import java.util.UUID;
 public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
+    private final UserRepository userRepository;
     private final RoleService roleService;
 
     private final static String USER_NOT_FOUND = "user not found";
@@ -65,6 +67,15 @@ public class AdminServiceImpl implements AdminService {
             user.getRoles().add(roleService.getUserRole());
             adminRepository.save(user);
             return ResponseEntity.ok().body(String.format("Роль юзера установлена для пользователя с email: %s, id: %d", user.getEmail(), user.getId()));
+        } else {
+            return ResponseEntity.badRequest().body(USER_NOT_FOUND);
+        }
+    }
+    public ResponseEntity<?> deleteUserById(UUID id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            userRepository.delete(userOptional.get());
+            return ResponseEntity.ok().body("deleted");
         } else {
             return ResponseEntity.badRequest().body(USER_NOT_FOUND);
         }

@@ -6,6 +6,8 @@ import com.example.avito.exception.ErrorResponse;
 import com.example.avito.repository.UserRepository;
 import com.example.avito.service.RoleService;
 import com.example.avito.service.UserService;
+import com.example.avito.validation.Validation;
+import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -60,15 +62,14 @@ public class UserServiceImpl implements UserService {
         if (updateUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(404, USER_NOT_FOUND));
         }
+        if (StringUtils.isEmpty(updateUserDto.getEmail())) {
+            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST), HttpStatus.BAD_REQUEST);
+        }
         if (userRepository.findByEmail(updateUserDto.getEmail()).isPresent()) {
             return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST), HttpStatus.BAD_REQUEST);
         }
 
-        User user = updateUser.get();
-        user.setUsername(updateUserDto.getUsername());
-        user.setNickname(updateUserDto.getNickname());
-        user.setEmail(updateUserDto.getEmail());
-        user.setCity(updateUserDto.getCity());
+        User user = getUser(updateUserDto, updateUser);
 
         userRepository.save(user);
 
@@ -79,13 +80,7 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> getMyProfile() {
         Optional<User> userOptional = getAuthenticationPrincipalUserByEmail();
         if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            MyProfileDto myProfileDto = new MyProfileDto();
-            myProfileDto.setUsername(user.getUsername());
-            myProfileDto.setNickname(user.getNickname());
-            myProfileDto.setEmail(user.getEmail());
-            myProfileDto.setCity(user.getCity());
-            return ResponseEntity.ok(myProfileDto);
+            return ResponseEntity.ok(getMyProfileDto(userOptional.get()));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(404, USER_NOT_FOUND));
         }
@@ -147,17 +142,24 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(401, PROFILE_NOT_DELETED));
         }
     }
+    private static User getUser(UpdateProfileDto updateUserDto, Optional<User> updateUser) {
+        User user = updateUser.get();
+        user.setUsername(StringUtils.isEmpty(updateUserDto.getUsername()) ? user.getUsername() : updateUserDto.getUsername());
+        user.setNickname(StringUtils.isEmpty(updateUserDto.getNickname()) ? user.getNickname() : updateUserDto.getNickname());
+        user.setEmail(
+                StringUtils.isEmpty(updateUserDto.getEmail())
+//                && Validation.isValidEmailAddress(updateUserDto.getEmail())
+                ? user.getEmail() : updateUserDto.getEmail());
+        user.setCity(StringUtils.isEmpty(updateUserDto.getCity()) ? user.getCity() : updateUserDto.getCity());
+        return user;
+    }
 
-
-//    @Override
-//    @Transactional
-//    public <T extends DeleteProfileDto> ResponseEntity<?> deleteProfile2(@RequestBody T deleteProfileDto) {
-//        Optional<User> deleteUser = getAuthenticationPrincipalUserByEmail();
-//        if (deleteUser.isPresent() && passwordEncoder.matches(deleteProfileDto.getPassword(), deleteUser.get().getPassword())) {
-//            userRepository.delete(deleteUser.get());
-//            return ResponseEntity.ok().body(PROFILE_DELETED_SUCCESSFULLY);
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(401, PROFILE_NOT_DELETED));
-//        }
-//    }
+    private MyProfileDto getMyProfileDto(User user) {
+        MyProfileDto myProfileDto = new MyProfileDto();
+        myProfileDto.setUsername(user.getUsername());
+        myProfileDto.setNickname(user.getNickname());
+        myProfileDto.setEmail(user.getEmail());
+        myProfileDto.setCity(user.getCity());
+        return myProfileDto;
+    }
 }

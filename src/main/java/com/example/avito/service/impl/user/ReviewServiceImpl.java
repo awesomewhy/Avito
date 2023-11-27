@@ -84,14 +84,15 @@ public class ReviewServiceImpl implements ReviewService {
                 .map(Review::getRating)
                 .toList();
 
-        BigDecimal sum = BigDecimal.ZERO;
         if (ratings.isEmpty()) {
             return ResponseEntity.ok().body(BigDecimal.ZERO);
         }
-        for (int i = 0; i < ratings.size(); i++) {
-            sum = sum.add(ratings.get(i));
-        }
-        return ResponseEntity.ok().body(new BigDecimal(String.valueOf(sum.divide(BigDecimal.valueOf(ratings.size()), 1, RoundingMode.HALF_UP))));
+
+        BigDecimal averageRating = ratings.stream()
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .divide(BigDecimal.valueOf(ratings.size()), 1, RoundingMode.HALF_UP);
+
+        return ResponseEntity.ok().body(averageRating);
     }
 }
 

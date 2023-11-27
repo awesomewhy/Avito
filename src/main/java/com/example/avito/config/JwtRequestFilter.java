@@ -2,6 +2,7 @@ package com.example.avito.config;
 
 import com.example.avito.util.JwtTokenUtils;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -39,6 +40,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 log.debug("Время жизни токена вышло");
             } catch (SignatureException e) {
                 log.debug("Подпись неправильная");
+            } catch (MalformedJwtException e) {
+                log.debug("Токен невалидный lol");
             }
         }
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
