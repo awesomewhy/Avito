@@ -39,6 +39,10 @@ public class UserServiceImpl implements UserService {
     private final static String PASSWORD_MATCHED = "password must not be the same as the old one";
     private final static String BAD_PASSWORD = "password is entered incorrectly";
     private final static String USER_SAVED = "User saved";
+    private final static String EMAIL_NULL = "Email is null";
+    private final static String PASSWORD_NULL = "password is null";
+    private final static String INVALID_EMAIL = "Неверно введенная почта";
+    private final static String BAD_REPEAT_PASSWORD = "bad repeat password";
     private final static String PASSWORD_CHANGED_SUCCESSFULLY = "Password changed successfully";
     private final static String OLD_PASSWORD_NOT_MATCH = "Old password doesn't match";
     private final static String PROFILE_DELETED_SUCCESSFULLY = "Profile deleted successfully";
@@ -62,14 +66,32 @@ public class UserServiceImpl implements UserService {
         if (updateUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(404, USER_NOT_FOUND));
         }
-        if (StringUtils.isEmpty(updateUserDto.getEmail())) {
-            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST), HttpStatus.BAD_REQUEST);
-        }
-        if (userRepository.findByEmail(updateUserDto.getEmail()).isPresent()) {
-            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST), HttpStatus.BAD_REQUEST);
-        }
 
         User user = getUser(updateUserDto, updateUser);
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok().body(USER_SAVED);
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> updateUserEmail(@RequestBody UpdateUserEmailDto updateUserEmailDto) {
+        Optional<User> updateUser = getAuthenticationPrincipalUserByEmail();
+        if (updateUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), USER_NOT_FOUND));
+        }
+        if (StringUtils.isEmpty(updateUserEmailDto.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), EMAIL_NULL));
+        }
+        if (userRepository.findByEmail(updateUserEmailDto.getEmail()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST));
+        }
+//        if(!Validation.isValidEmailAddress(updateUserEmailDto.getEmail())) {
+//            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), INVALID_EMAIL), HttpStatus.BAD_REQUEST);
+//        }
+        User user = updateUser.get();
+        user.setEmail(updateUserEmailDto.getEmail());
 
         userRepository.save(user);
 
@@ -82,7 +104,7 @@ public class UserServiceImpl implements UserService {
         if (userOptional.isPresent()) {
             return ResponseEntity.ok(getMyProfileDto(userOptional.get()));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(404, USER_NOT_FOUND));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), USER_NOT_FOUND));
         }
     }
 
@@ -114,20 +136,27 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
         Optional<User> updateUser = getAuthenticationPrincipalUserByEmail();
-
-        if (updateUser.isPresent() && passwordEncoder.matches(changePasswordDto.getOldPassword(), updateUser.get().getPassword())) {
+        if(updateUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), USER_NOT_FOUND));
+        }
+        if (passwordEncoder.matches(changePasswordDto.getOldPassword(), updateUser.get().getPassword())) {
+            if (StringUtils.isEmpty(changePasswordDto.getOldPassword())
+                    || StringUtils.isEmpty(changePasswordDto.getNewPassword())
+                    || StringUtils.isEmpty(changePasswordDto.getRepeatPassword())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), PASSWORD_NULL));
+            }
             if (passwordEncoder.matches(changePasswordDto.getNewPassword(), updateUser.get().getPassword())) {
-                return ResponseEntity.badRequest().body(PASSWORD_MATCHED);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), PASSWORD_MATCHED));
             }
             if (!changePasswordDto.getNewPassword().equals(changePasswordDto.getRepeatPassword())) {
-                return ResponseEntity.badRequest().body(BAD_PASSWORD);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), BAD_REPEAT_PASSWORD));
             }
             User user = updateUser.get();
             user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
             userRepository.save(user);
             return ResponseEntity.ok().body(PASSWORD_CHANGED_SUCCESSFULLY);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(404, OLD_PASSWORD_NOT_MATCH));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), OLD_PASSWORD_NOT_MATCH));
         }
     }
 
@@ -139,17 +168,13 @@ public class UserServiceImpl implements UserService {
             userRepository.delete(deleteUser.get());
             return ResponseEntity.ok().body(PROFILE_DELETED_SUCCESSFULLY);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(401, PROFILE_NOT_DELETED));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), PROFILE_NOT_DELETED));
         }
     }
-    private static User getUser(UpdateProfileDto updateUserDto, Optional<User> updateUser) {
+    private User getUser(UpdateProfileDto updateUserDto, Optional<User> updateUser) {
         User user = updateUser.get();
         user.setUsername(StringUtils.isEmpty(updateUserDto.getUsername()) ? user.getUsername() : updateUserDto.getUsername());
         user.setNickname(StringUtils.isEmpty(updateUserDto.getNickname()) ? user.getNickname() : updateUserDto.getNickname());
-        user.setEmail(
-                StringUtils.isEmpty(updateUserDto.getEmail())
-//                && Validation.isValidEmailAddress(updateUserDto.getEmail())
-                ? user.getEmail() : updateUserDto.getEmail());
         user.setCity(StringUtils.isEmpty(updateUserDto.getCity()) ? user.getCity() : updateUserDto.getCity());
         return user;
     }
