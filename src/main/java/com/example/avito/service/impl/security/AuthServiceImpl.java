@@ -71,10 +71,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDto registrationUserDto) {
         if (!registrationUserDto.getPassword().equals(registrationUserDto.getConfirmPassword())) {
-            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), PASSWORDS_DID_NOT_MATCH), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), PASSWORDS_DID_NOT_MATCH), HttpStatus.BAD_REQUEST);
         }
         if (userRepository.findByEmail(registrationUserDto.getEmail()).isPresent()) {
-            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST ), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), USER_WHIT_THIS_EMAIL_EXIST));
         }
 //        if(!Validation.isValidEmailAddress(registrationUserDto.getEmail())) {
 //            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), INVALID_EMAIL), HttpStatus.BAD_REQUEST);

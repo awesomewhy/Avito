@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final static String USER_NOT_FOUND_BY_EMAIL = "user with email %s not found";
@@ -122,12 +124,16 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void createNewUser(@RequestBody RegistrationUserDto registrationUserDto) {
+        if(roleService.getUserRole().isEmpty()) {
+            log.error("role not found");
+            return;
+        }
         User user = User.builder()
                 .username(registrationUserDto.getUsername())
                 .email(registrationUserDto.getEmail())
                 .password(passwordEncoder.encode(registrationUserDto.getPassword()))
                 .city(registrationUserDto.getCity())
-                .roles(List.of(roleService.getUserRole())).build();
+                .roles(List.of(roleService.getUserRole().get())).build();
         userRepository.save(user);
     }
 

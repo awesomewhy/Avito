@@ -1,6 +1,7 @@
 package com.example.avito.service.impl.admin;
 
 import com.example.avito.entity.User;
+import com.example.avito.exception.ErrorResponse;
 import com.example.avito.repository.AdminRepository;
 import com.example.avito.repository.UserRepository;
 import com.example.avito.service.AdminService;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -46,11 +48,14 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public ResponseEntity<?> setAdminRole(UUID id) {
+        if(roleService.getAdminRole().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), "admin role not found"));
+        }
         Optional<User> userOptional = adminRepository.findById(id);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             user.getRoles().clear();
-            user.getRoles().add(roleService.getAdminRole());
+            user.getRoles().add(roleService.getAdminRole().get());
             adminRepository.save(user);
             return ResponseEntity.ok().body(String.format("Роль администратора установлена для пользователя с email: %s, id: %d", user.getEmail(), user.getId()));
         } else {
@@ -61,10 +66,13 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public ResponseEntity<?> setUserRole(UUID id) {
         Optional<User> userOptional = adminRepository.findById(id);
+        if(roleService.getUserRole().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), "user role not found"));
+        }
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             user.getRoles().clear();
-            user.getRoles().add(roleService.getUserRole());
+            user.getRoles().add(roleService.getUserRole().get());
             adminRepository.save(user);
             return ResponseEntity.ok().body(String.format("Роль юзера установлена для пользователя с email: %s, id: %d", user.getEmail(), user.getId()));
         } else {

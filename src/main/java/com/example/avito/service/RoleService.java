@@ -3,8 +3,9 @@ package com.example.avito.service;
 import com.example.avito.entity.Role;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface RoleService {
-    Role getUserRole();
-    Role getAdminRole();
+    Optional<Role> getUserRole();
+    Optional<Role> getAdminRole();
 }
