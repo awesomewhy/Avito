@@ -5,7 +5,7 @@ Java 17
 REST API
 
 JWT
-й
+
 Spring Boot
 
 Spring Data
