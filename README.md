@@ -9,7 +9,7 @@ JWT
 Spring Boot
 
 Spring Data
-y
+
 Spring Sequrity
 
 Spring Data Jpa
