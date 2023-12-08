@@ -30,7 +30,7 @@ public class User {
     @Column(unique = true, name = "email")
     private String email;
 
-    @Column(name = "city")
+    @Column(unique = true, name = "city")
     private String city;
 
     @ManyToMany
@@ -40,6 +40,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Collection<Role> roles;
+
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "city_id")
+//    private City city;
 
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private Collection<Review> reviews;

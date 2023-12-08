@@ -3,6 +3,7 @@ package com.example.avito.service.impl.user;
 import com.example.avito.dto.reviewdto.ReviewDto;
 import com.example.avito.entity.Review;
 import com.example.avito.entity.User;
+import com.example.avito.enums.ReviewServiceError;
 import com.example.avito.exception.ErrorResponse;
 import com.example.avito.mapper.ReviewMapper;
 import com.example.avito.repository.ReviewRepository;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,7 +34,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final UserService userService;
     private final ReviewMapper reviewMapper;
 
-    private final static String COMMENT_NOT_ADDED = " comment not added";
+    private final static String COMMENT_NOT_ADDED = "comment not added";
     private final static String COMMENT_ADDED = "comment added";
     private final static String USER_NOT_FOUND = "user not found";
 
@@ -41,11 +43,13 @@ public class ReviewServiceImpl implements ReviewService {
         try {
             Optional<User> reviewer = userService.getAuthenticationPrincipalUserByEmail();
             if (reviewer.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(404, USER_NOT_FOUND + COMMENT_NOT_ADDED));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(404, ReviewServiceError.USER_NOT_FOUND.getMessage()
+                        + ReviewServiceError.COMMENT_NOT_ADDED.getMessage()));
             }
             Optional<User> user = userRepository.findById(UUID.fromString(uuid));
             if (user.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(400, USER_NOT_FOUND + COMMENT_NOT_ADDED));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(404, ReviewServiceError.USER_NOT_FOUND.getMessage()
+                        + ReviewServiceError.COMMENT_NOT_ADDED.getMessage()));
             }
             Review review = Review.builder()
                     .userId(user.get())

@@ -29,6 +29,8 @@ public class AdminServiceImpl implements AdminService {
     private final RoleService roleService;
 
     private final static String USER_NOT_FOUND = "user not found";
+    private final static String USER_ROLE_NOT_FOUND = "user role not found";
+    private final static String ADMIN_ROLE_NOT_FOUND = "admin role not found";
 
     @Override
     public <T> String convertObjectsToJson(List<T> objects) {
@@ -49,7 +51,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public ResponseEntity<?> setAdminRole(UUID id) {
         if(roleService.getAdminRole().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), "admin role not found"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), ADMIN_ROLE_NOT_FOUND));
         }
         Optional<User> userOptional = adminRepository.findById(id);
         if (userOptional.isPresent()) {
@@ -67,7 +69,7 @@ public class AdminServiceImpl implements AdminService {
     public ResponseEntity<?> setUserRole(UUID id) {
         Optional<User> userOptional = adminRepository.findById(id);
         if(roleService.getUserRole().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), "user role not found"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), USER_ROLE_NOT_FOUND));
         }
         if (userOptional.isPresent()) {
             User user = userOptional.get();

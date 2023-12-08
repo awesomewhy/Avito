@@ -11,7 +11,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-       - db_data:/var/lib/postgresql/data:rw
+       - db_data:/var/lib/postgresql/data
 
   app:
     build: .
