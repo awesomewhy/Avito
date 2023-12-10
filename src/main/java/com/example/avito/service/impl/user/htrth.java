@@ -1,2 +1,3 @@
-package com.example.avito.service.impl.user;public class htrth {
+package com.example.avito.service.impl.user;
+public class htrth {
 }
