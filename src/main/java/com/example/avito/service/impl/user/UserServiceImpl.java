@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Slf4j
 public class UserServiceImpl implements UserService {
-
     private final static String USER_NOT_FOUND_BY_EMAIL = "user with email %s not found";
     private final static String USER_WHIT_THIS_EMAIL_EXIST = "user with this email exist";
     private final static String USER_NOT_FOUND = "user not found";

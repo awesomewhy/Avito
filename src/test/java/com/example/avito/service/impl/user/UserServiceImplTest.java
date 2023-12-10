@@ -1,6 +1,7 @@
 package com.example.avito.service.impl.user;
 
 import com.example.avito.dto.reviewdto.ReviewDto;
+import com.example.avito.dto.userdto.UpdateProfileDto;
 import com.example.avito.entity.Review;
 import com.example.avito.entity.User;
 import com.example.avito.repository.UserRepository;
@@ -12,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -93,8 +95,28 @@ class UserServiceImplTest {
 
     @Test
     void testUpdateUserWhenUserIsFoundThenReturnResponseEntityOk() {
-        when(userService.getAuthenticationPrincipalUserByEmail()).thenReturn(Optional.of(mockUser));
+        // Arrange
+        User existingUser = new User();
+        existingUser.setId(UUID.randomUUID());
+        existingUser.setUsername("existingUser");
+        existingUser.setEmail("existing@example.com");
 
+        UpdateProfileDto updateProfileDto = UpdateProfileDto.builder()
+                .username("updatedUser")
+                .build();
+
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(existingUser));
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(existingUser.getEmail());
+        SecurityContextHolder.setContext(securityContext);
+
+        // Act
+        ResponseEntity<?> response = userService.updateUser(updateProfileDto);
+
+        // Assert
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo("User saved");
+        verify(userRepository).save(existingUser);
     }
 
     @Test
