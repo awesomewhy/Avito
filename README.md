@@ -39,3 +39,30 @@ Maven
 # Для не особо разбирающихся
 
 основная логика в папке service -> impl
+
+# spring-security-docker
+
+## Как скачать проект
+
+1. Склонировать репозиторий
+```sh
+git clone https://github.com/44heroh/spring3-security6-docker.git
+```
+
+# Запуск в докере
+1. Собираем проект 
+```sh
+mvn package
+```
+2. Билдим докер файл
+```sh
+docker compose -d --build
+```
+3. запускаем
+```sh
+docker compose up
+```
+Возможно у кого-то так 
+```sh
+docker-compose up
+```
