@@ -43,9 +43,6 @@ Maven
 ## Как скачать проект
 
 1. Склонировать репозиторий
-```sh
-git clone https://github.com/44heroh/spring3-security6-docker.git
-```
 
 # Запуск в докере
 
