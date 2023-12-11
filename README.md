@@ -48,6 +48,9 @@ git clone https://github.com/44heroh/spring3-security6-docker.git
 ```
 
 # Запуск в докере
+
+Нужно перейти в папку где находиться проект
+
 1. Собираем проект 
 ```sh
 mvn package
