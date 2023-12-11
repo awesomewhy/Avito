@@ -32,18 +32,7 @@ public class AdminServiceImpl implements AdminService {
     private final static String USER_NOT_FOUND = "user not found";
     private final static String USER_ROLE_NOT_FOUND = "user role not found";
     private final static String ADMIN_ROLE_NOT_FOUND = "admin role not found";
-
-    @Override
-    public <T> String convertObjectsToJson(List<T> objects) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.writeValueAsString(objects);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return "Error converting users to JSON";
-        }
-    }
-
+    
     @Override
     public List<User> getAllUsers() {
         return adminRepository.findAll();
