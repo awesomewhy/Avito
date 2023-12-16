@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class AdminServiceImpl implements AdminService {
     private final static String ADMIN_ROLE_NOT_FOUND = "admin role not found";
     
     @Override
+    @Cacheable("users")
     public List<User> getAllUsers() {
         return adminRepository.findAll();
     }

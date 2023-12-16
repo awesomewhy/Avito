@@ -16,6 +16,10 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -43,6 +47,8 @@ public class ProductServiceImpl implements ProductService {
     private final UserService userService;
     private final ProductMapper productMapper;
 
+
+
     @Override
     public ResponseEntity<?> addItem(@RequestBody ProductSellDto productDto) {
         Optional<User> user = userService.getAuthenticationPrincipalUserByEmail();
@@ -66,6 +72,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable("products")
     public List<ProductShowDto> getAllProducts() {
         return productRepository.findAll().stream()
                 .map(productMapper::mapToProductShowDto)
@@ -108,6 +115,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Caching(
+            cacheable = {
+                    @Cacheable("users"),
+                    @Cacheable("contacts")
+            },
+            put = {
+                    @CachePut("tables"),
+                    @CachePut("chairs"),
+                    @CachePut(value = "meals", key = "#product.email")
+            },
+            evict = {
+                    @CacheEvict(value = "services", key = "#product.name")
+            }
+    )
     public ResponseEntity<?> getMyProducts() {
         Optional<User> user = userService.getAuthenticationPrincipalUserByEmail();
         if (user.isEmpty()) {
