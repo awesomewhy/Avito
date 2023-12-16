@@ -2,6 +2,7 @@ package com.example.avito.dto.productdto;
 
 import lombok.Data;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 
 @Data
