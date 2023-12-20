@@ -18,7 +18,7 @@ Hibernate
 
 Docker
 
-Swaggerq
+Swagger
 
 JUnit
 
