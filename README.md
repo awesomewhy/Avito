@@ -28,7 +28,7 @@ Git
 
 Lombok
 
-Maven
+Mavenq
 
 Реализован чат на WebSocket
 
