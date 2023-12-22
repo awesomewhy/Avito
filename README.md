@@ -16,13 +16,13 @@ Spring Data Jpa
 
 Hibernate
 
-Docker
+Postgres
 
-Swagger
+Docker
 
 JUnit
 
-Postgres
+Swagger
 
 Git
 
