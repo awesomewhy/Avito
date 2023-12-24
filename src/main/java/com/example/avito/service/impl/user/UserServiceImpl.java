@@ -13,6 +13,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.jooq.DSLContext;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -26,6 +28,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.locks.Lock;
 import java.util.stream.Collectors;
 
 
@@ -66,8 +70,6 @@ public class UserServiceImpl implements UserService {
         if (updateUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(404, USER_NOT_FOUND));
         }
-
-
         User user = getUser(updateUserDto, updateUser);
 
         userRepository.save(user);
@@ -133,7 +135,8 @@ public class UserServiceImpl implements UserService {
                 .email(registrationUserDto.getEmail())
                 .password(passwordEncoder.encode(registrationUserDto.getPassword()))
                 .city(registrationUserDto.getCity())
-                .roles(List.of(roleService.getUserRole().get())).build();
+                .roles(List.of(roleService.getUserRole().get()))
+                .build();
         userRepository.save(user);
     }
 
@@ -141,6 +144,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
         Optional<User> updateUser = getAuthenticationPrincipalUserByEmail();
+
         if(updateUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), USER_NOT_FOUND));
         }

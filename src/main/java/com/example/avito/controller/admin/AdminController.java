@@ -1,5 +1,6 @@
 package com.example.avito.controller.admin;
 
+import com.example.avito.entity.Product;
 import com.example.avito.entity.User;
 import com.example.avito.service.AdminService;
 import lombok.RequiredArgsConstructor;

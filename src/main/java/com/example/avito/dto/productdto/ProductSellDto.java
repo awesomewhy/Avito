@@ -11,6 +11,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ProductSellDto {
     @ManyToOne
     @JoinColumn(name = "creatorId")

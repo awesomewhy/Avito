@@ -6,20 +6,19 @@ import com.example.avito.repository.AdminRepository;
 import com.example.avito.repository.UserRepository;
 import com.example.avito.service.AdminService;
 import com.example.avito.service.RoleService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.cache.annotation.Cacheable;
+import org.jooq.DSLContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+
 
 @Service
 @RequiredArgsConstructor
@@ -29,13 +28,13 @@ public class AdminServiceImpl implements AdminService {
     private final AdminRepository adminRepository;
     private final UserRepository userRepository;
     private final RoleService roleService;
+    private final DSLContext dsl;
 
     private final static String USER_NOT_FOUND = "user not found";
     private final static String USER_ROLE_NOT_FOUND = "user role not found";
     private final static String ADMIN_ROLE_NOT_FOUND = "admin role not found";
     
     @Override
-    @Cacheable("users")
     public List<User> getAllUsers() {
         return adminRepository.findAll();
     }

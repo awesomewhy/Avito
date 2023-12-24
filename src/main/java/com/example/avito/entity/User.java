@@ -1,5 +1,8 @@
 package com.example.avito.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Collection;
@@ -33,6 +36,7 @@ public class User {
     @Column(unique = true, name = "city")
     private String city;
 
+    @JsonManagedReference
     @ManyToMany
     @JoinTable(
             name = "users_roles",
@@ -45,9 +49,11 @@ public class User {
 //    @JoinColumn(name = "city_id")
 //    private City city;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private Collection<Review> reviews;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "creatorId", cascade = CascadeType.ALL)
     private Collection<Product> products;
 
