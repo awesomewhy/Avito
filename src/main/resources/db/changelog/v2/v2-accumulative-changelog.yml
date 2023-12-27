@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: v2-create-loans-table-changelog.yml
+      relativeToChangelogFile: true

@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: v2-1
+      author: serenty
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: loan
+      changes:
+        - createTable:
+            tableName: loan
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                  autoIncrement: true
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: car_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: car_loan_fk
+                    referencedTableName: car
+                    referencedColumnNames: id

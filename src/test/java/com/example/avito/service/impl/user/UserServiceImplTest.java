@@ -95,7 +95,6 @@ class UserServiceImplTest {
 
     @Test
     void testUpdateUserWhenUserIsFoundThenReturnResponseEntityOk() {
-        // Arrange
         User existingUser = new User();
         existingUser.setId(UUID.randomUUID());
         existingUser.setUsername("existingUser");
@@ -110,10 +109,8 @@ class UserServiceImplTest {
         when(authentication.getPrincipal()).thenReturn(existingUser.getEmail());
         SecurityContextHolder.setContext(securityContext);
 
-        // Act
         ResponseEntity<?> response = userService.updateUser(updateProfileDto);
 
-        // Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isEqualTo("User saved");
         verify(userRepository).save(existingUser);

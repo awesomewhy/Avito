@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/avito
+    url: jdbc:postgresql://localhost:5432/liquibase_start
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
@@ -10,11 +10,11 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
+
   liquibase:
     enabled: true
-    change-log: classpath:/db/changelog/db.changelog-master.xml
-    contexts: dev, test
+    change-log: db/changelog/main-changelog.xml
 
 logging:
   level:

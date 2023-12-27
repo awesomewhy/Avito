@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.Lock;
@@ -62,7 +63,7 @@ public class UserServiceImpl implements UserService {
         String email = (String) authentication.getPrincipal();
         return userRepository.findByEmail(email);
     }
-
+    
     @Override
     @Transactional
     public ResponseEntity<?> updateUser(@RequestBody UpdateProfileDto updateUserDto) {
@@ -126,7 +127,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void createNewUser(@RequestBody RegistrationUserDto registrationUserDto) {
-        if(roleService.getUserRole().isEmpty()) {
+        if (roleService.getUserRole().isEmpty()) {
             log.error("role not found");
             return;
         }
@@ -145,7 +146,7 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
         Optional<User> updateUser = getAuthenticationPrincipalUserByEmail();
 
-        if(updateUser.isEmpty()) {
+        if (updateUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), USER_NOT_FOUND));
         }
         if (passwordEncoder.matches(changePasswordDto.getOldPassword(), updateUser.get().getPassword())) {
@@ -180,6 +181,7 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), PROFILE_NOT_DELETED));
         }
     }
+
     private User getUser(UpdateProfileDto updateUserDto, Optional<User> updateUser) {
         User user = updateUser.get();
         user.setUsername(StringUtils.isEmpty(updateUserDto.getUsername()) ? user.getUsername() : updateUserDto.getUsername());
