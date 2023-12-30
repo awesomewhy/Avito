@@ -2,7 +2,7 @@
 
 Java 17
 
-REST API
+REST APIq
 
 JWT
 
