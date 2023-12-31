@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ErrorResponse extends Exception{
+public class ErrorResponse {
     private final int code;
     private final String message;
 

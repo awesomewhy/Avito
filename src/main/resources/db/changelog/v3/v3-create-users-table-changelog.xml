@@ -15,38 +15,40 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="email" type="text">
-                <constraints nullable="false" unique="true"/>
+                <constraints unique="true"/>
             </column>
-            <column name="password" type="text">
-                <constraints nullable="false"/>
-            </column>
+            <column name="password" type="text"/>
             <column name="username" type="text"/>
             <column name="nickname" type="text"/>
             <column name="city" type="text"/>
 
-            <column name="role_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="review_id" type="uuid">
-                <constraints nullable="false"/>
-            </column>
-            <column name="products" type="uuid">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
     </changeSet>
 
-    <changeSet id="v3-2" author="serenty">
-        <createTable tableName="">
-            <column></column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="v3-3"  author="serenty">
+    <changeSet id="v3-2"  author="serenty">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
         <createTable tableName="users_roles">
             <column name="user_id" type="uuid"/>
             <column name="role_id" type="integer"/>
         </createTable>
+    </changeSet>
+
+    <changeSet id="v3-3" author="serenty">
+        <addForeignKeyConstraint baseTableName="users_roles"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_users_roles_user_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="users_roles"
+                                 baseColumnNames="role_id"
+                                 constraintName="fk_users_roles_role_id"
+                                 referencedTableName="roles"
+                                 referencedColumnNames="id"/>
     </changeSet>
 
 </databaseChangeLog>

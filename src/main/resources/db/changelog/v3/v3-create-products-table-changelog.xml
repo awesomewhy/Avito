@@ -1,0 +1,40 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="v3-1" author="serenty">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="products"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="products">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="creator_id" type="uuid"/>
+            <column name="price" type="numeric"/>
+            <column name="type" type="text"/>
+            <column name="city" type="text"/>
+            <column name="date_creation" type="date"/>
+            <column name="description" type="text"/>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet  id="v3-2" author="serenty">
+        <addForeignKeyConstraint
+                baseTableName="products"
+                baseColumnNames="creator_id"
+                constraintName="fk_reviews_creator_id"
+                referencedColumnNames="id"
+                referencedTableName="users"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"
+        />
+
+    </changeSet>
+
+</databaseChangeLog>

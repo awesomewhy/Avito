@@ -7,5 +7,12 @@
 <!--    -->
 <!--    <include file="v2/v2-accumulative-changelog.yml" relativeToChangelogFile="true"/>-->
 
-<!--    <include file="v3/v3-create-users-table-changelog.xml" relativeToChangelogFile="true"/>-->
+    <include file="v3/v3-create-users-table-changelog.xml" relativeToChangelogFile="true"/>
+
+    <include file="v3/v3-create-roles-table-changelog.xml" relativeToChangelogFile="true"/>
+
+    <include file="v3/v3-create-products-table-changelog.xml" relativeToChangelogFile="true"/>
+
+    <include file="v3/v3-create-reviews-table-changelog.xml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

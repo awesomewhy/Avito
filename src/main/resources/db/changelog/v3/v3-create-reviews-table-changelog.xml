@@ -1,0 +1,51 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="v3-1" author="serenty">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="reviews"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="reviews">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="uuid"/>
+            <column name="reviewer_id" type="uuid"/>
+            <column name="type" type="text"/>
+            <column name="rating" type="numeric"/>
+            <column name="comment" type="text"/>
+            <column name="image" type="text"/>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet  id="v3-2" author="serenty">
+        <addForeignKeyConstraint
+                baseColumnNames="user_id"
+                baseTableName="reviews"
+                constraintName="fk_reviews_user_id"
+                referencedColumnNames="id"
+                referencedTableName="users"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"
+        />
+    </changeSet>
+
+    <changeSet  id="v3-3" author="serenty">
+        <addForeignKeyConstraint
+                baseTableName="reviews"
+                baseColumnNames="reviewer_id"
+                constraintName="fk_reviews_reviewer_id"
+                referencedColumnNames="id"
+                referencedTableName="users"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"
+        />
+    </changeSet>
+
+</databaseChangeLog>

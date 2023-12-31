@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), EMAIL_NULL));
         }
         if (userRepository.findByEmail(updateUserEmailDto.getEmail()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST));
+            return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), USER_WHIT_THIS_EMAIL_EXIST));
         }
 //        if(!Validation.isValidEmailAddress(updateUserEmailDto.getEmail())) {
 //            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), INVALID_EMAIL), HttpStatus.BAD_REQUEST);
@@ -127,10 +127,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void createNewUser(@RequestBody RegistrationUserDto registrationUserDto) {
-        if (roleService.getUserRole().isEmpty()) {
-            log.error("role not found");
-            return;
-        }
         User user = User.builder()
                 .username(registrationUserDto.getUsername())
                 .email(registrationUserDto.getEmail())
