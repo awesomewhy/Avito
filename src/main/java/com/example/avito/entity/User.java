@@ -18,22 +18,11 @@ import java.util.UUID;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "UUID")
     private UUID id;
-
-    @Column(name = "username")
     private String username;
-
-    @Column(name = "nickname")
-    private String nickname = "";
-
-    @Column(name = "password")
+    private String nickname;
     private String password;
-
-    @Column(unique = true, name = "email")
     private String email;
-
-    @Column(unique = true, name = "city")
     private String city;
 
     @JsonManagedReference
@@ -44,10 +33,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Collection<Role> roles;
-
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "city_id")
-//    private City city;
 
     @JsonBackReference
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)

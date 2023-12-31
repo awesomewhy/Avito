@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
         String email = (String) authentication.getPrincipal();
         return userRepository.findByEmail(email);
     }
-    
+
     @Override
     @Transactional
     public ResponseEntity<?> updateUser(@RequestBody UpdateProfileDto updateUserDto) {

@@ -18,29 +18,16 @@ import java.util.Date;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private User creatorId;
 
-    @NotNull
-    @Column(name = "price")
     private BigDecimal price;
-
-    @NotNull
-    @Column(name = "type")
     private String type;
-
-    @Column(name = "city")
     private String city;
-
-    @NotNull
-    @Column(name = "dateCreation")
     private Date dateCreation;
-
-    @Column(name = "description")
     private String description;
 
 }

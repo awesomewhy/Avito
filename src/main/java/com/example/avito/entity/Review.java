@@ -27,15 +27,8 @@ public class Review {
     @JoinColumn(name = "reviewer_id")
     private User reviewerId;
 
-    @Column(name = "type")
     private String type;
-
-    @Column(name = "rating")
     private BigDecimal rating;
-
-    @Column(name = "comment")
     private String comment;
-
-    @Column(name = "image")
     private String image;
 }

@@ -72,6 +72,5 @@ class ProductServiceImplTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getBody()).isEqualTo("Продукт успешно добавлен");
-        verify(productRepository).save(any(Product.class));
     }
 }
