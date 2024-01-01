@@ -4,7 +4,7 @@ Java 17
 
 REST API
 
-JWT
+Liquibase
 
 Spring Boot
 
@@ -21,6 +21,8 @@ Postgres
 Docker
 
 JUnit
+
+JWT
 
 Swagger
 
