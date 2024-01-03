@@ -115,20 +115,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Caching(
-            cacheable = {
-                    @Cacheable("users"),
-                    @Cacheable("contacts")
-            },
-            put = {
-                    @CachePut("tables"),
-                    @CachePut("chairs"),
-                    @CachePut(value = "meals", key = "#product.email")
-            },
-            evict = {
-                    @CacheEvict(value = "services", key = "#product.name")
-            }
-    )
+//    @Caching(
+//            cacheable = {
+//                    @Cacheable("users"),
+//                    @Cacheable("contacts")
+//            },
+//            put = {
+//                    @CachePut("tables"),
+//                    @CachePut("chairs"),
+//                    @CachePut(value = "meals", key = "#product.email")
+//            },
+//            evict = {
+//                    @CacheEvict(value = "services", key = "#product.name")
+//            }
+//    )
     public ResponseEntity<?> getMyProducts() {
         Optional<User> user = userService.getAuthenticationPrincipalUserByEmail();
         if (user.isEmpty()) {

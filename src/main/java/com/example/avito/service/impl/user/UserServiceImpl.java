@@ -1,5 +1,6 @@
 package com.example.avito.service.impl.user;
 
+import com.example.avito.AvitoApplication;
 import com.example.avito.dto.userdto.*;
 import com.example.avito.entity.User;
 import com.example.avito.exception.ErrorResponse;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
+import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,8 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.Lock;
 import java.util.stream.Collectors;
+
+import static org.jooq.impl.DSL.*;
 
 
 @Service
@@ -56,10 +60,15 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
+    private final DSLContext dsl;
+
 
     @Override
     public Optional<User> getAuthenticationPrincipalUserByEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return Optional.empty();
+        }
         String email = (String) authentication.getPrincipal();
         return userRepository.findByEmail(email);
     }
@@ -177,6 +186,20 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), PROFILE_NOT_DELETED));
         }
     }
+
+//    @Override
+//    public ResponseEntity<?> updateUserWithNativeQuerySqlById(UUID id) {
+//        try {
+//            dsl.update(table("users"))
+//                    .set(field("email"), "updatedEmail")
+//                    .set(field("nickname"), "nick")
+//                    .execute();
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                    .body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), "Failed to update user"));
+//        }
+//    }
 
     private User getUser(UpdateProfileDto updateUserDto, Optional<User> updateUser) {
         User user = updateUser.get();

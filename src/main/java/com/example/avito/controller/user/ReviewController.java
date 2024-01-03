@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class ReviewController {
-    public final ReviewService reviewService;
+    private final ReviewService reviewService;
     @PostMapping("/create/{id}")
     public ResponseEntity<?> createReview(@PathVariable String id, @RequestBody ReviewDto reviewDto) {
         return reviewService.createReview(id, reviewDto);

@@ -1,5 +1,6 @@
 package com.example.avito.service.impl.admin;
 
+import com.example.avito.config.security.SecurityConfiguration;
 import com.example.avito.entity.User;
 import com.example.avito.exception.ErrorResponse;
 import com.example.avito.repository.AdminRepository;
@@ -29,6 +30,7 @@ public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final DSLContext dsl;
+    private final SecurityConfiguration securityConfiguration;
 
     private final static String USER_NOT_FOUND = "user not found";
     private final static String USER_ROLE_NOT_FOUND = "user role not found";
@@ -44,6 +46,7 @@ public class AdminServiceImpl implements AdminService {
         if(roleService.getAdminRole().isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), ADMIN_ROLE_NOT_FOUND));
         }
+
         Optional<User> userOptional = adminRepository.findById(id);
         if (userOptional.isPresent()) {
             User user = userOptional.get();

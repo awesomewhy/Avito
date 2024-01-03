@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface UserService extends UserDetailsService {
     Optional<User> getAuthenticationPrincipalUserByEmail();
@@ -17,4 +18,5 @@ public interface UserService extends UserDetailsService {
     ResponseEntity<?> changePassword(@RequestBody ChangePasswordDto changePasswordDto);
     ResponseEntity<?> deleteProfile(@RequestBody DeleteProfileDto deleteProfileDto);
     ResponseEntity<?> updateUserEmail(@RequestBody UpdateUserEmailDto updateUserEmailDto);
+//    ResponseEntity<?> updateUserWithNativeQuerySqlById(UUID id);
 }
