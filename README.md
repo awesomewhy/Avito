@@ -5,7 +5,7 @@ Java 17
 REST API
 
 Liquibase
-й
+
 Spring Boot
 
 Spring Data
