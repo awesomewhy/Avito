@@ -12,7 +12,7 @@ Spring Data
 
 Spring Sequrity
 
-Spring Data Jpa
+Spring Data Jpaq
 
 Hibernate
 
