@@ -17,7 +17,7 @@ Spring Data Jpa
 Hibernate
 
 Postgres
-q
+
 Docker
 
 JUnit
